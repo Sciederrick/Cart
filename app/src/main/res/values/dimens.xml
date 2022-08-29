@@ -1,8 +1,11 @@
 <resources>
+    <dimen name="appbar_elevation_none">0dp</dimen>
+    <dimen name="toolbar_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="text_size_extra_lg">48dp</dimen>
-    <dimen name="text_size_lg">36dp</dimen>
-    <dimen name="text_size_md">28dp</dimen>
+    <dimen name="text_base">18sp</dimen>
+    <dimen name="text_md">24sp</dimen>
+    <dimen name="text_lg">36sp</dimen>
+    <dimen name="text_xl">48sp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

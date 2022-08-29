@@ -70,6 +70,7 @@ class ItemsActivity : AppCompatActivity(),
 
         setContentView(binding.root)
         setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
 
 
         fab.setOnClickListener {
