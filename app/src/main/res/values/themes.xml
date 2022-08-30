@@ -8,5 +8,6 @@
         <item name="tintAccent">@style/TintAccent</item>
         <item name="splashScreen">@style/SplashScreen</item>
         <item name="navHeader">@style/NavHeader.Green</item>
+        <item name="itemListImageButton">@style/ItemListImageButton</item>
     </style>
 </resources>

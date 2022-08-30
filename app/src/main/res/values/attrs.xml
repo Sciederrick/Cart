@@ -7,4 +7,5 @@
     <attr name="tintAccent" format="reference" />
     <attr name="splashScreen" format="reference" />
     <attr name="navHeader" format="reference" />
+    <attr name="itemListImageButton" format="reference" />
 </resources>

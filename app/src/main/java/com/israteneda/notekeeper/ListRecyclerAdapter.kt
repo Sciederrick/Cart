@@ -23,7 +23,6 @@ class ListRecyclerAdapter(private val context: Context, private val lists: List<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val list = lists[position]
-        holder.textCourse.text = list.course?.title
         holder.textTitle.text = list.title
         holder.listPosition = position
     }
@@ -33,8 +32,7 @@ class ListRecyclerAdapter(private val context: Context, private val lists: List<
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textCourse: TextView = itemView.findViewById(R.id.textCourse)
-        val textTitle: TextView = itemView.findViewById(R.id.textTitle)
+        val textTitle: TextView = itemView.findViewById(R.id.listTitle)
         var listPosition = 0
         init {
             itemView.setOnClickListener {

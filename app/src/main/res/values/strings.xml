@@ -6,6 +6,10 @@
     <string name="afternoon">Afternoon!</string>
     <string name="evening">Evening!</string>
 
+    <!-- Strings used for buttons content Description -->
+    <string name="overflow_action_desc">More Actions</string>
+    <string name="shared_with_desc">People collaborating over this list</string>
+
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
