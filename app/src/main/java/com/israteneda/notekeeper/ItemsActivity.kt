@@ -2,18 +2,14 @@ package com.israteneda.notekeeper
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.SubMenu
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.core.view.children
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,20 +27,20 @@ class ItemsActivity : AppCompatActivity(),
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var navView: NavigationView
-    private lateinit var listItems: RecyclerView
+    private lateinit var lists: RecyclerView
     /* bindings */
 
-    private val noteLayoutManager by lazy { LinearLayoutManager(this) }
+    private val listLayoutManager by lazy { LinearLayoutManager(this) }
 
-    private val noteRecycleAdapter by lazy {
+    private val listRecyclerAdapter by lazy {
         val adapter = ListRecyclerAdapter(this, DataManager.loadLists())
         adapter.setOnSelectedListener(this)
         adapter
     }
 
-    private val courseLayoutManager by lazy { GridLayoutManager(this, resources.getInteger(R.integer.course_grid_span)) }
+    private val listItemLayoutManager by lazy { LinearLayoutManager(this) }
 
-    private val courseRecycleAdapter by lazy { CourseRecycleAdapter(this, DataManager.courses.values.toList()) }
+    private val listItemRecyclerAdapter by lazy { ListItemRecyclerAdapter(this, DataManager.listItems) }
 
     private val recentlyViewedListsRecyclerAdapter by lazy {
         val adapter = ListRecyclerAdapter(this, viewModel.recentlyViewedLists)
@@ -66,7 +62,7 @@ class ItemsActivity : AppCompatActivity(),
         drawerLayout = binding.drawerLayout
         toolbar = binding.appBarItems.toolbar
         navView = binding.navView
-        listItems = binding.appBarItems.contentItems.listItems
+        lists = binding.appBarItems.contentItems.lists
 
         setContentView(binding.root)
         setSupportActionBar(toolbar)
@@ -101,29 +97,29 @@ class ItemsActivity : AppCompatActivity(),
 
 
     private fun displayNotes() {
-        listItems.layoutManager = noteLayoutManager
-        listItems.adapter = noteRecycleAdapter
+        lists.layoutManager = listLayoutManager
+        lists.adapter = listRecyclerAdapter
 
         navView.menu.findItem(R.id.nav_notes).isCheckable = true
     }
 
     private fun displayCourses() {
-        listItems.layoutManager = courseLayoutManager
-        listItems.adapter = courseRecycleAdapter
+        lists.layoutManager = listItemLayoutManager
+        lists.adapter = listItemRecyclerAdapter
 
         navView.menu.findItem(R.id.nav_courses).isCheckable = true
     }
 
     private fun displayRecentlyViewedLists() {
-        listItems.layoutManager = noteLayoutManager
-        listItems.adapter = recentlyViewedListsRecyclerAdapter
+        lists.layoutManager = listLayoutManager
+        lists.adapter = recentlyViewedListsRecyclerAdapter
 
         navView.menu.findItem(R.id.nav_courses).isCheckable = true
     }
 
     override fun onResume() {
         super.onResume()
-        listItems.adapter?.notifyDataSetChanged()
+        lists.adapter?.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {
@@ -183,7 +179,7 @@ class ItemsActivity : AppCompatActivity(),
 //    }
 
     override fun onListSelected(list: ListInfo) {
-        viewModel.addToRecentlyViewedNotes(list)
+        viewModel.addToRecentlyViewedLists(list)
         updateNavViewHistory()
     }
 

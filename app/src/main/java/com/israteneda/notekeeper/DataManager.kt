@@ -1,93 +1,107 @@
 package com.israteneda.notekeeper
 
 object DataManager {
-    val courses = HashMap<String, CourseInfo>()
-    val lists = ArrayList<ListInfo>()
+    val lists = HashMap<String, ListInfo>()
+    val listItems = ArrayList<ListItem>()
 
     init {
-        initializeCourses()
-        initializeNotes()
+        initializeListItems()
+        initializeLists()
     }
 
-    fun loadLists(vararg noteIds: Int): List<ListInfo> {
+    fun loadLists(vararg listIds: Int): List<ListInfo> {
         simulateLoadDelay()
-        val noteList: List<ListInfo>
+        val list: List<ListInfo>
 
-        if(noteIds.isEmpty())
-            noteList = lists
+        if(listIds.isEmpty())
+            list = convertHashmapValuesToArrayList()
         else {
-            noteList = ArrayList<ListInfo>(noteIds.size)
-            for(noteId in noteIds)
-                noteList.add(lists[noteId])
+            list = ArrayList(listIds.size)
+            val lists = convertHashmapValuesToArrayList()
+
+            for(listId in listIds)
+                lists[listId]?.let { list.add(it) }
         }
-        return noteList
+        return list
     }
 
-    fun loadNote(noteId: Int) = lists[noteId]
+    fun convertHashmapValuesToArrayList() :ArrayList<ListInfo>{
+        val tmp = ArrayList<ListInfo>()
+        lists.values.forEach { tmp.add(it) }
+        return tmp
+    }
 
-    fun isLastNoteId(noteId: Int) = noteId == lists.lastIndex
+//    fun loadNote(listId: Int) = lists[listId]
 
-    private fun idOfNote(note: ListInfo) = lists.indexOf(note)
+//    fun isLastListId(listId: Int) = listId == lists.lastIndex
 
-    fun noteIdsAsIntArray(notes: List<ListInfo>): IntArray {
-        val noteIds = IntArray(notes.size)
-        for(index in 0..notes.lastIndex)
-            noteIds[index] = DataManager.idOfNote(notes[index])
-        return noteIds
+    private fun idOfList(list: ListInfo) = lists.values.indexOf(list)
+
+    fun listIdsAsIntArray(list: List<ListInfo>): IntArray {
+        val listIds = IntArray(list.size)
+        for(index in 0..list.lastIndex)
+            listIds[index] = idOfList(list[index])
+        return listIds
     }
 
     private fun simulateLoadDelay() {
         Thread.sleep(1000)
     }
 
-    fun addNote(course: CourseInfo, noteTitle: String, noteText: String): Int {
-        val note = ListInfo(course, noteTitle, noteText)
-        lists.add(note)
-        return lists.lastIndex
+//    fun addList(id: String, listTitle: String, listTags: List<String>? = null): Int {
+//        val list = ListInfo(id, listTitle, listTags)
+//        lists.add(list)
+//        return lists.lastIndex
+//    }
+
+//    fun findList(id: String): ListInfo? {
+//        for (list in lists)
+//            if (id == list.id)
+//                return list
+//        return null
+//    }
+
+    private fun initializeLists() {
+        var list = ListInfo(listId="construction_project", title="Construction Project", tags=listOf("construction", "brick laying"))
+        lists[list.listId] = list
+
+        list = ListInfo(listId="android_development", title="Android Development", tags=listOf("work"))
+        lists[list.listId] = list
+
+        list = ListInfo(listId="shopping", title="Shopping")
+        lists[list.listId] = list
     }
 
-    fun findNote(course: CourseInfo, noteTitle: String, noteText: String): ListInfo? {
-        for (note in lists)
-            if (course == note.course && noteTitle == note.title && noteText == note.text)
-                return note
-        return null
+    private fun initializeListItems() {
+        var listItem = ListItem(list=lists["construction_project"], title="Site Clearing", description="Clear land")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["construction_project"], title="Foundation", description="Pour Concrete, lay nylon and bricks")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["construction_project"], title="Plinth beam & Slab", description="Not sure how to do it yet")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["construction_project"], title="Superstructure", description="Leave this to the experts")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["construction_project"], title="Brick Laying", description="Hire a company to do this")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["android_development"], title="Android Programming with Intents", description="Learn to open external processes")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["android_development"], title="Android Themes & Styles", description="Modularize styles for flexibility")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["shopping"], title="Formal Rubber Shoes", description="For work")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["shopping"], title="Casual Shorts", description="For home wear")
+        listItems.add(listItem)
+
+        listItem = ListItem(list=lists["shopping"], title="Chinese Collar Shirts", description="For the office")
+        listItems.add(listItem)
     }
 
-    private fun initializeCourses() {
-        var course = CourseInfo(title = "Java Fundamentals: The Java Language", courseId = "java_lang")
-        courses[course.courseId] = course
-
-        course = CourseInfo("android_intents", "Android Programming with Intents")
-        courses[course.courseId] = course
-
-        course = CourseInfo(courseId = "android_async", title = "Android Async Programming and Services")
-        courses[course.courseId] = course
-
-
-        course = CourseInfo("java_core", "Java Fundamentals: The Core Platform")
-        courses[course.courseId] = course
-    }
-
-    fun initializeNotes() {
-        var note = ListInfo(courses["android_intents"] as CourseInfo, "Dynamic intent resolution", "Wow intents allow components to be resolved at runtime")
-        lists.add(note)
-
-        note = ListInfo(courses["android_intents"] as CourseInfo, "Deleting intents", "PendingIntents are powerful, they delegate much more than just a component invocation")
-        lists.add(note)
-
-        note = ListInfo(courses["android_async"] as CourseInfo, "Service default threads", "Did you know that by default an Android Service will tie up the UI thread")
-        lists.add(note)
-
-        note = ListInfo(courses["java_lang"] as CourseInfo, "Parameters", "Leverage variable-length parameters list")
-        lists.add(note)
-
-        note = ListInfo(courses["java_lang"] as CourseInfo, "Anonymous classes", "Anonymous classes simplify implementing one use type")
-        lists.add(note)
-
-        note = ListInfo(courses["java_core"] as CourseInfo, "Compiler options", "The .jar options isn't compatible with the -cp option")
-        lists.add(note)
-
-        note = ListInfo(courses["java_core"] as CourseInfo, "Serialization", "Remember to include Serial/VersionUID to assure version compatibility")
-        lists.add(note)
-    }
 }

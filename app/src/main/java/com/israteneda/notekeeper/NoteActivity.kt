@@ -16,21 +16,21 @@ import com.israteneda.notekeeper.databinding.ActivityMainBinding
 
 class NoteActivity : AppCompatActivity() {
     private val tag = this::class.simpleName
-    private var notePosition = POSITION_NOT_SET
+    private var listItemPosition = POSITION_NOT_SET
 
-    private val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
+//    private val noteGetTogetherHelper = NoteGetTogetherHelper(this, lifecycle)
 
-    private val locManager = PseudoLocationManager(this) { lat, lon ->
-        Log.d(tag, "Location Callback Lat:$lat Lon:$lon")
-    }
+//    private val locManager = PseudoLocationManager(this) { lat, lon ->
+//        Log.d(tag, "Location Callback Lat:$lat Lon:$lon")
+//    }
 
     /* bindings */
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
-    private lateinit var spinnerCourses: Spinner
-    private lateinit var textNoteTitle: EditText
-    private lateinit var textNoteText: EditText
+    private lateinit var spinnerLists: Spinner
+    private lateinit var listItemTitle: EditText
+    private lateinit var listItemDescription: EditText
 
     /* bindings */
 
@@ -41,46 +41,46 @@ class NoteActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         toolbar = binding.toolbar
-        spinnerCourses = binding.contentMain.spinnerCourses
-        textNoteTitle = binding.contentMain.textNoteTitle
-        textNoteText = binding.contentMain.textNoteText
+        spinnerLists = binding.contentMain.spinnerLists
+        listItemTitle = binding.contentMain.newListItemTitle
+        listItemDescription = binding.contentMain.newListItemDescription
 
         setContentView(binding.root)
         setSupportActionBar(toolbar)
 
-        val adapterCourses = ArrayAdapter(this,
+        val adapterLists = ArrayAdapter(this,
             android.R.layout.simple_spinner_item,
-            DataManager.courses.values.toList())
-        adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            DataManager.lists.values as ArrayList)
+        adapterLists.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        spinnerCourses.adapter = adapterCourses
+        spinnerLists.adapter = adapterLists
 
-        notePosition = savedInstanceState?.getInt(LIST_POSITION, POSITION_NOT_SET) ?:
-            intent.getIntExtra(LIST_POSITION, POSITION_NOT_SET)
+        listItemPosition = savedInstanceState?.getInt(LIST_ITEM_POSITION, POSITION_NOT_SET) ?:
+            intent.getIntExtra(LIST_ITEM_POSITION, POSITION_NOT_SET)
 
 
-        if(notePosition != POSITION_NOT_SET) {
-            displayNote()
+        if(listItemPosition != POSITION_NOT_SET) {
+            displayListItem()
         }
         else {
-            createNote()
+            createListItem()
         }
         Log.d(tag, "onCreate")
     }
 
-    override fun onStart() {
-        super.onStart()
-        locManager.start()
-    }
-
-    override fun onStop() {
-        locManager.stop()
-        super.onStop()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        locManager.start()
+//    }
+//
+//    override fun onStop() {
+//        locManager.stop()
+//        super.onStop()
+//    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(LIST_POSITION, notePosition)
+        outState.putInt(LIST_POSITION, listItemPosition)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -92,7 +92,7 @@ class NoteActivity : AppCompatActivity() {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if (notePosition >= DataManager.lists.lastIndex){
+        if (listItemPosition >= DataManager.listItems.lastIndex){
             val menuItem = menu?.findItem(R.id.action_next)
             if (menuItem != null){
                 menuItem.icon = getDrawable(R.drawable.ic_block_with_24dp)
@@ -105,7 +105,7 @@ class NoteActivity : AppCompatActivity() {
         return when(item.itemId) {
             R.id.action_settings -> true
             R.id.action_next -> {
-                if(notePosition < DataManager.lists.lastIndex){
+                if(listItemPosition < DataManager.listItems.lastIndex){
                     moveNext()
                 } else {
                     val message = "No more notes"
@@ -113,55 +113,55 @@ class NoteActivity : AppCompatActivity() {
                 }
                 true
             }
-            R.id.action_get_together -> {
-                noteGetTogetherHelper.sendMessage(DataManager.loadNote(notePosition))
-                true
-            }
+//            R.id.action_get_together -> {
+//                noteGetTogetherHelper.sendMessage(DataManager.loadNote(listItemPosition))
+//                true
+//            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onPause() {
         super.onPause()
-        saveNote()
+        saveListItem()
         Log.d(tag, "onPause")
     }
 
-    private fun saveNote() {
-        val note = DataManager.lists[notePosition]
-        note.title = textNoteTitle.text.toString()
-        note.text = textNoteText.text.toString()
-        note.course = spinnerCourses.selectedItem as CourseInfo
+    private fun saveListItem() {
+        val listItem = DataManager.listItems[listItemPosition]
+        listItem.title = listItemTitle.text.toString()
+        listItem.description = listItemDescription.text.toString()
+        listItem.list = spinnerLists.selectedItem as ListInfo
     }
 
-    private fun displayNote() {
-        if(notePosition > DataManager.lists.lastIndex) {
+    private fun displayListItem() {
+        if(listItemPosition > DataManager.listItems.lastIndex) {
             showMessage("Note not found").show()
-            Log.e(tag, "Invalid note position $notePosition, max valid position ${DataManager.lists.lastIndex}")
+            Log.e(tag, "Invalid note position $listItemPosition, max valid position ${DataManager.listItems.lastIndex}")
             return
         }
 
-        Log.i(tag, "Displaying note for position $notePosition")
-        val note = DataManager.lists[notePosition]
-        (textNoteTitle as TextView).text = note.title
-        (textNoteText as TextView).text = note.text
+        Log.i(tag, "Displaying note for position $listItemPosition")
+        val listItem = DataManager.listItems[listItemPosition]
+        (listItemTitle as TextView).text = listItem.title
+        (listItemDescription as TextView).text = listItem.description
 
-        val coursePosition = DataManager.courses.values.indexOf(note.course)
-        spinnerCourses.setSelection(coursePosition)
+        val listPosition = DataManager.lists.values.indexOf(listItem.list)
+        spinnerLists.setSelection(listPosition)
     }
 
     private fun moveNext() {
-        ++notePosition
-        displayNote()
+        ++listItemPosition
+        displayListItem()
         invalidateOptionsMenu()
     }
 
-    private fun createNote() {
-        DataManager.lists.add(ListInfo())
-        notePosition = DataManager.lists.lastIndex
+    private fun createListItem() {
+        DataManager.listItems.add(ListItem())
+        listItemPosition = DataManager.listItems.lastIndex
     }
 
     private fun showMessage(message: String) =
-        Snackbar.make(textNoteTitle, message, Snackbar.LENGTH_LONG)
+        Snackbar.make(listItemTitle, message, Snackbar.LENGTH_LONG)
 
 }

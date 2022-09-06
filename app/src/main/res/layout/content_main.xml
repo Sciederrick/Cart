@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <EditText
-        android:id="@+id/textNoteTitle"
+        android:id="@+id/newListItemTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -14,12 +14,12 @@
         android:gravity="start|top"
         android:hint="@string/note_title_hint"
         android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="@+id/spinnerCourses"
-        app:layout_constraintStart_toStartOf="@+id/spinnerCourses"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerCourses" />
+        app:layout_constraintEnd_toEndOf="@+id/spinnerLists"
+        app:layout_constraintStart_toStartOf="@+id/spinnerLists"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerLists" />
 
     <EditText
-        android:id="@+id/textNoteText"
+        android:id="@+id/newListItemDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -27,13 +27,13 @@
         android:gravity="start|top"
         android:hint="@string/note_text_hint"
         android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="@+id/spinnerCourses"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerLists"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/spinnerCourses"
-        app:layout_constraintTop_toBottomOf="@+id/textNoteTitle" />
+        app:layout_constraintStart_toStartOf="@+id/spinnerLists"
+        app:layout_constraintTop_toBottomOf="@+id/newListItemTitle" />
 
     <Spinner
-        android:id="@+id/spinnerCourses"
+        android:id="@+id/spinnerLists"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

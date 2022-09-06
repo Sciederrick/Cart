@@ -2,6 +2,8 @@
     <dimen name="appbar_elevation_none">0dp</dimen>
     <dimen name="toolbar_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="card_view_margin_bottom">4dp</dimen>
+    <dimen name="card_view_content_padding_right">2dp</dimen>
     <dimen name="text_base">18sp</dimen>
     <dimen name="text_md">24sp</dimen>
     <dimen name="text_lg">36sp</dimen>

@@ -85,5 +85,7 @@
         <item name="srcCompat">@drawable/ic_add_white_24dp</item>
     </style>
 
-
+    <style name="CardViewLayout">
+        <item name="android:layout_marginBottom">@dimen/card_view_margin_bottom</item>
+    </style>
 </resources>

@@ -16,22 +16,22 @@ class ItemsActivityViewModel : ViewModel() {
     private val maxRecentlyViewedLists = 3
     val recentlyViewedLists = ArrayList<ListInfo>(maxRecentlyViewedLists)
 
-    fun addToRecentlyViewedNotes(note: ListInfo) {
-        val existingIndex = recentlyViewedLists.indexOf(note)
+    fun addToRecentlyViewedLists(list: ListInfo) {
+        val existingIndex = recentlyViewedLists.indexOf(list)
         if (existingIndex == -1) {
-            recentlyViewedLists.add(0, note)
+            recentlyViewedLists.add(0, list)
             for (index in recentlyViewedLists.lastIndex downTo maxRecentlyViewedLists)
                 recentlyViewedLists.removeAt(index)
         } else {
             for (index in (existingIndex - 1) downTo 0)
                 recentlyViewedLists[index + 1] = recentlyViewedLists[index]
-            recentlyViewedLists[0] = note
+            recentlyViewedLists[0] = list
         }
     }
 
     fun saveState(outState: Bundle) {
         outState.putInt(navDrawerDysplaySelectionName, navDrawerDisplaySelection)
-        val notesId = DataManager.noteIdsAsIntArray(recentlyViewedLists)
+        val notesId = DataManager.listIdsAsIntArray(recentlyViewedLists)
         outState.putIntArray(recentlyViewedListIdsName, notesId)
     }
 
