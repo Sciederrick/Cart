@@ -35,6 +35,7 @@
     <!-- Toolbar -->
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- Text -->
     <style name="TextNormal" parent="TextAppearance.AppCompat.Body1">
         <item name="android:textColor">@color/colorSecondary</item>
         <item name="android:textSize">@dimen/text_base</item>
@@ -50,6 +51,7 @@
 
     <style name="TextTitle" parent="TextAppearance.AppCompat.Medium">
         <item name="android:color">@color/colorSecondary</item>
+        <item name="android:textSize">@dimen/text_base</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -57,18 +59,26 @@
         <item name="android:color">@color/colorMuted</item>
     </style>
 
+    <style name="TextPageTitle" parent="TextTitle">
+        <item name="android:textSize">@dimen/text_xl</item>
+    </style>
+
     <style name="TintAccent">
         <item name="android:tint">@color/colorAccent</item>
     </style>
 
+    <style name="TintNeutralDark">
+        <item name="android:tint">@color/colorNeutralDark</item>
+    </style>
+
     <style name="SplashScreen">
-        <item name="android:textSize">@dimen/text_xl</item>
+        <item name="android:textSize">@dimen/text_4xl</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:background">@color/colorSecondary</item>
     </style>
 
     <style name="NavHeader">
-        <item name="android:textSize">@dimen/text_md</item>
+        <item name="android:textSize">@dimen/text_2xl</item>
     </style>
 
     <style name="NavHeader.Green" parent="NavHeader">

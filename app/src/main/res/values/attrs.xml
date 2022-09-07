@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="textNormal" format="reference" />
+    <attr name="textNormalBlack" format="reference" />
     <attr name="textTitle" format="reference" />
     <attr name="textNormalMuted" format="reference" />
     <attr name="textTitleMuted" format="reference" />
     <attr name="tintAccent" format="reference" />
+    <attr name="tintNeutralDark" format="reference" />
     <attr name="splashScreen" format="reference" />
     <attr name="navHeader" format="reference" />
     <attr name="itemListImageButton" format="reference" />

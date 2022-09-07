@@ -25,7 +25,7 @@ object DataManager {
         return list
     }
 
-    fun convertHashmapValuesToArrayList() :ArrayList<ListInfo>{
+    private fun convertHashmapValuesToArrayList() :ArrayList<ListInfo>{
         val tmp = ArrayList<ListInfo>()
         lists.values.forEach { tmp.add(it) }
         return tmp

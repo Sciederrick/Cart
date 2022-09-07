@@ -2,10 +2,12 @@
 <resources>
     <style name="Theme.AppBasic" parent="AppTheme">
         <item name="textNormal">@style/TextNormal</item>
+        <item name="textNormalBlack">@style/TextNormal.Black</item>
         <item name="textNormalMuted">@style/TextNormal.Muted</item>
         <item name="textTitle">@style/TextTitle</item>
         <item name="textTitleMuted">@style/TextTitle.Muted</item>
         <item name="tintAccent">@style/TintAccent</item>
+        <item name="tintNeutralDark">@style/TintNeutralDark</item>
         <item name="splashScreen">@style/SplashScreen</item>
         <item name="navHeader">@style/NavHeader.Green</item>
         <item name="itemListImageButton">@style/ItemListImageButton</item>
