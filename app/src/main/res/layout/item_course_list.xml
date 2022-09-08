@@ -12,7 +12,8 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="1dp"
         app:cardUseCompatPadding="true"
-        app:contentPadding="16dp">
+        app:contentPadding="16dp"
+        app:contentPaddingBottom="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -80,9 +81,10 @@
 
             <ImageView
                 android:id="@+id/itemImage"
-                android:background="@drawable/rounded_rectangle_2"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_rectangle_2"
                 android:contentDescription="@string/list_item_image_desc"
                 android:scaleType="center"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -92,7 +94,7 @@
 
 
             <TextView
-                android:id="@+id/listItemDescription"
+                android:id="@+id/listItemDesc"
                 style="?textNormalBlack"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -107,7 +109,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="62dp" />
+                app:layout_constraintGuide_begin="48dp" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/listItemsExpandGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="itemImage,listItemDesc" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>
