@@ -7,6 +7,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
@@ -195,8 +196,8 @@ class ItemsActivity : AppCompatActivity(),
             title = listItem.title!!
             titleCondensed = if (listItem.title?.length!! > 20) listItem.title?.slice(0..20)
                 .plus("...") else title
-            itemHistory = target.add(Menu.NONE, Menu.NONE, Menu.NONE, "$titleCondensed")
-            itemHistory.icon = getDrawable(R.drawable.ic_history_24dp)
+            itemHistory = target.add(Menu.NONE, Menu.NONE, Menu.NONE, titleCondensed)
+            itemHistory.icon = AppCompatResources.getDrawable(this, R.drawable.ic_history_24dp)
 
         }
     }

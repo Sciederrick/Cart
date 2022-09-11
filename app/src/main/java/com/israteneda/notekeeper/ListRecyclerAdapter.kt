@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class ListRecyclerAdapter(private val context: Context, private val lists: List<ListInfo>)
@@ -37,14 +38,18 @@ class ListRecyclerAdapter(private val context: Context, private val lists: List<
         init {
             itemView.setOnClickListener {
                 onListSelectedListener?.onListSelected(lists[listPosition])
-                val intent = Intent(context, NoteActivity::class.java)
-                intent.putExtra(LIST_POSITION, listPosition)
+                val intent = Intent(context, SubItemsActivity::class.java)
+                Toast.makeText(context, "listItemPosition: ${lists[listPosition].listId}", Toast.LENGTH_LONG).show()
+                intent.putExtra(LIST_ITEM_POSITION, lists[listPosition].listId)
                 context.startActivity(intent)
+//                val intent = Intent(context, NoteActivity::class.java)
+//                intent.putExtra(LIST_POSITION, listPosition)
+//                context.startActivity(intent)
             }
         }
     }
 
     interface OnListSelectedListener {
-        fun onListSelected(note: ListInfo)
+        fun onListSelected(list: ListInfo)
     }
 }

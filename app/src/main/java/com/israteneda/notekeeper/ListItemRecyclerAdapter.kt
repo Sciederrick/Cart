@@ -46,6 +46,7 @@ class ListItemRecyclerAdapter(private val context: Context, private val listItem
                     View.VISIBLE
                 }
             }
+
         }
     }
 }

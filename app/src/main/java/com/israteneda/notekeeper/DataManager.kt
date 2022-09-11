@@ -1,12 +1,14 @@
 package com.israteneda.notekeeper
 
+import android.util.Log
+
 object DataManager {
     val lists = HashMap<String, ListInfo>()
     val listItems = ArrayList<ListItem>()
 
     init {
-        initializeListItems()
         initializeLists()
+        initializeListItems()
     }
 
     fun loadLists(vararg listIds: Int): List<ListInfo> {
@@ -23,6 +25,11 @@ object DataManager {
                 lists[listId]?.let { list.add(it) }
         }
         return list
+    }
+
+    fun loadListItems(listId: String): List<ListItem> {
+        simulateLoadDelay()
+        return listItems.filter { listItem -> listItem.list == lists[listId] }
     }
 
     private fun convertHashmapValuesToArrayList() :ArrayList<ListInfo>{

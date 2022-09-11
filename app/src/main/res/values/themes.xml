@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Theme.AppBasic" parent="AppTheme">
         <item name="textNormal">@style/TextNormal</item>
         <item name="textNormalBlack">@style/TextNormal.Black</item>
@@ -12,4 +13,13 @@
         <item name="navHeader">@style/NavHeader.Green</item>
         <item name="itemListImageButton">@style/ItemListImageButton</item>
     </style>
+
+    <style name="Theme.AppBasic.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.AppBasic.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.AppBasic.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
