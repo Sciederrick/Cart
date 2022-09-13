@@ -1,6 +1,7 @@
 package com.israteneda.notekeeper
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -47,10 +48,15 @@ class NoteActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = ""
+
+        val listValues = ArrayList<ListInfo>()
+        listValues.addAll(DataManager.lists.values)
 
         val adapterLists = ArrayAdapter(this,
             android.R.layout.simple_spinner_item,
-            DataManager.lists.values as ArrayList)
+            listValues)
         adapterLists.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         spinnerLists.adapter = adapterLists
@@ -90,29 +96,33 @@ class NoteActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        if (listItemPosition >= DataManager.listItems.lastIndex){
-            val menuItem = menu?.findItem(R.id.action_next)
-            if (menuItem != null){
-                menuItem.icon = getDrawable(R.drawable.ic_block_with_24dp)
-            }
-        }
-        return super.onPrepareOptionsMenu(menu)
-    }
+//    @SuppressLint("UseCompatLoadingForDrawables")
+//    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+//        if (listItemPosition >= DataManager.listItems.lastIndex){
+//            val menuItem = menu?.findItem(R.id.action_next)
+//            if (menuItem != null){
+//                menuItem.icon = getDrawable(R.drawable.ic_block_with_24dp)
+//            }
+//        }
+//        return super.onPrepareOptionsMenu(menu)
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.action_settings -> true
-            R.id.action_next -> {
-                if(listItemPosition < DataManager.listItems.lastIndex){
-                    moveNext()
-                } else {
-                    val message = "No more notes"
-                    showMessage(message).show()
-                }
+            R.id.action_home -> {
+                startActivity(Intent(this, ItemsActivity::class.java))
                 true
             }
+//            R.id.action_settings -> true
+//            R.id.action_next -> {
+//                if(listItemPosition < DataManager.listItems.lastIndex){
+//                    moveNext()
+//                } else {
+//                    val message = "No more notes"
+//                    showMessage(message).show()
+//                }
+//                true
+//            }
 //            R.id.action_get_together -> {
 //                noteGetTogetherHelper.sendMessage(DataManager.loadNote(listItemPosition))
 //                true

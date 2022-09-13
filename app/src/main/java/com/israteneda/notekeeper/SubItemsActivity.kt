@@ -1,5 +1,6 @@
 package com.israteneda.notekeeper
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.widget.Toast
@@ -41,12 +42,11 @@ class SubItemsActivity : AppCompatActivity() {
                 intent.getStringExtra(LIST_ITEM_POSITION)
 
         supportActionBar?.title = lists[listItemPosition]?.title
-//        Toast.makeText(this, "listItemPosition: $listItemPosition", Toast.LENGTH_LONG).show()
         displayListItems()
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        binding.fab.setOnClickListener {
+            val intent = Intent(this, NoteActivity::class.java)
+            startActivity(intent)
         }
     }
 

@@ -10,12 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppBasic">
         <activity
-            android:name=".SubItemsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_sub_items"
-            android:parentActivityName="com.israteneda.notekeeper.ItemsActivity"
-            android:theme="@style/Theme.AppBasic.NoActionBar" />
-        <activity
             android:name=".SplashScreenActivity"
             android:exported="true">
             <intent-filter>
@@ -28,7 +22,14 @@
             android:name=".ItemsActivity"
             android:label="@string/title_activity_items" />
         <activity
+            android:name=".SubItemsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_sub_items"
+            android:parentActivityName="com.israteneda.notekeeper.ItemsActivity"
+            android:theme="@style/Theme.AppBasic.NoActionBar" />
+        <activity
             android:name=".NoteActivity"
+            android:parentActivityName="com.israteneda.notekeeper.SubItemsActivity"
             android:label="@string/note_activity_label" />
     </application>
 

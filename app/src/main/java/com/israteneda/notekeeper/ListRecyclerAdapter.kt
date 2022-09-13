@@ -39,12 +39,8 @@ class ListRecyclerAdapter(private val context: Context, private val lists: List<
             itemView.setOnClickListener {
                 onListSelectedListener?.onListSelected(lists[listPosition])
                 val intent = Intent(context, SubItemsActivity::class.java)
-                Toast.makeText(context, "listItemPosition: ${lists[listPosition].listId}", Toast.LENGTH_LONG).show()
                 intent.putExtra(LIST_ITEM_POSITION, lists[listPosition].listId)
                 context.startActivity(intent)
-//                val intent = Intent(context, NoteActivity::class.java)
-//                intent.putExtra(LIST_POSITION, listPosition)
-//                context.startActivity(intent)
             }
         }
     }

@@ -99,7 +99,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:text="@string/list_item_desc_default_text"
+                android:text="@string/list_item_desc_hint"
                 app:layout_constraintEnd_toEndOf="@+id/listItemPrice"
                 app:layout_constraintStart_toEndOf="@+id/itemImage"
                 app:layout_constraintTop_toTopOf="@+id/guideline2" />

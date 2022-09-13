@@ -4,6 +4,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="card_view_margin_bottom">4dp</dimen>
     <dimen name="card_view_content_padding_right">2dp</dimen>
+    <dimen name="min_clickable_height">48dp</dimen>
     <!-- text sizes according to Google's material guidelines -->
     <dimen name="text_sm">13sp</dimen>
     <dimen name="text_base">14sp</dimen>

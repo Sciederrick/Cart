@@ -12,4 +12,8 @@ data class ListItem(var list: ListInfo? = null,
 data class ListInfo(val listId: String,
                     var title: String? = null,
                     val tags: List<String>? = null,
-)
+) {
+    override fun toString(): String {
+        return title?:""
+    }
+}
