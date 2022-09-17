@@ -10,6 +10,9 @@
     <string name="overflow_action_desc">More Actions</string>
     <string name="shared_with_desc">People collaborating over this list</string>
     <string name="button_expand_desc">Click to see more</string>
+    <string name="button_add_item_image">Add item image</string>
+    <string name="button_expand">View full item image</string>
+    <string name="button_minimize">Minimize item image</string>
 
     <!-- Strings used for images content Description -->
     <string name="list_item_image_desc">An Image of the list item</string>

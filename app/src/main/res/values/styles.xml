@@ -98,4 +98,9 @@
     <style name="CardViewLayout">
         <item name="android:layout_marginBottom">@dimen/card_view_margin_bottom</item>
     </style>
+
+    <style name="RoundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/rounded_corner_radius</item>
+    </style>
 </resources>
