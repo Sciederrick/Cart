@@ -13,6 +13,10 @@
     <string name="button_add_item_image">Add item image</string>
     <string name="button_expand">View full item image</string>
     <string name="button_minimize">Minimize item image</string>
+    <string name="button_prev">Previous item</string>
+    <string name="button_next">Next item</string>
+    <string name="fab_audio">Add Audio</string>
+    <string name="fab_new_list">Create a new list</string>
 
     <!-- Strings used for images content Description -->
     <string name="list_item_image_desc">An Image of the list item</string>

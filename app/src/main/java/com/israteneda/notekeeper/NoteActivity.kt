@@ -7,11 +7,11 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.israteneda.notekeeper.databinding.ActivityMainBinding
 
@@ -32,6 +32,9 @@ class NoteActivity : AppCompatActivity() {
     private lateinit var spinnerLists: Spinner
     private lateinit var listItemTitle: EditText
     private lateinit var listItemDescription: EditText
+    private lateinit var btnExpand: ImageButton
+    private lateinit var imageViewSmall: ShapeableImageView
+    private lateinit var imageViewLarge: ShapeableImageView
 
     /* bindings */
 
@@ -45,6 +48,9 @@ class NoteActivity : AppCompatActivity() {
         spinnerLists = binding.contentMain.spinnerLists
         listItemTitle = binding.contentMain.newListItemTitle
         listItemDescription = binding.contentMain.newListItemDescription
+        btnExpand = binding.contentMain.btnExpand!!
+        imageViewSmall = binding.contentMain.itemImage2Small!!
+        imageViewLarge = binding.contentMain.itemImage2!!
 
         setContentView(binding.root)
         setSupportActionBar(toolbar)
@@ -71,8 +77,12 @@ class NoteActivity : AppCompatActivity() {
         else {
             createListItem()
         }
+
+        btnExpand.setOnClickListener { toggleItemImage() }
+
         Log.d(tag, "onCreate")
     }
+
 
 //    override fun onStart() {
 //        super.onStart()
@@ -173,5 +183,27 @@ class NoteActivity : AppCompatActivity() {
 
     private fun showMessage(message: String) =
         Snackbar.make(listItemTitle, message, Snackbar.LENGTH_LONG)
+
+    private fun toggleItemImage() {
+        if (imageViewLarge.visibility == View.VISIBLE) {
+            btnExpand.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.ic_caret_down_bold_24dp
+                )
+            )
+            imageViewLarge.visibility = View.GONE
+            imageViewSmall.visibility = View.VISIBLE
+        } else {
+            btnExpand.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this,
+                    R.drawable.ic_caret_up_bold_24dp
+                )
+            )
+            imageViewLarge.visibility = View.VISIBLE
+            imageViewSmall.visibility = View.GONE
+        }
+    }
 
 }

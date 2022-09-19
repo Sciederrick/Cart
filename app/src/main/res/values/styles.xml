@@ -90,9 +90,18 @@
     </style>
 
     <!-- theme independent Styles -->
-    <style name="AddFAB" parent="@style/Widget.Design.FloatingActionButton">
+    <style name="FAB" parent="@style/Widget.Design.FloatingActionButton">
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+    </style>
+
+    <style name="AddFAB" parent="FAB">
         <item name="android:layout_margin">@dimen/fab_margin</item>
         <item name="srcCompat">@drawable/ic_add_white_24dp</item>
+    </style>
+
+    <style name="AudioFAB" parent="FAB">
+        <item name="android:layout_margin">@dimen/fab_margin</item>
+        <item name="srcCompat">@drawable/ic_microphone_technology_24dp</item>
     </style>
 
     <style name="CardViewLayout">

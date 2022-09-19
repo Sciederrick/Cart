@@ -7,6 +7,7 @@
     tools:context=".NoteActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -16,15 +17,24 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/toolbar_margin"
             android:background="@drawable/rounded_rectangle"
+            app:menu="@menu/menu_main"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Edit Note"
-            app:menu = "@menu/menu_main"/>
+            app:title="Edit Note" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include android:id="@+id/content_main"
-        layout="@layout/content_main" />
+    <include
+        android:id="@+id/content_main"
+        layout="@layout/content_main"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        style="@style/AudioFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:contentDescription="@string/fab_audio" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

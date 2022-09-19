@@ -26,7 +26,7 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="28dp"
                 android:contentDescription="@string/button_expand_desc"
-                android:minHeight="48dp"
+                android:minHeight="@dimen/min_clickable_height"
                 app:layout_constraintEnd_toStartOf="@+id/listItemPrice"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_weight="0.5"
