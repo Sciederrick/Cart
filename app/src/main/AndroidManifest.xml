@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.israteneda.notekeeper">
+    package="com.derrick.cart">
 
     <application
         android:allowBackup="true"
@@ -25,12 +25,12 @@
             android:name=".SubItemsActivity"
             android:exported="false"
             android:label="@string/title_activity_sub_items"
-            android:parentActivityName="com.israteneda.notekeeper.ItemsActivity"
+            android:parentActivityName=".ItemsActivity"
             android:theme="@style/Theme.AppBasic.NoActionBar" />
         <activity
-            android:name=".NoteActivity"
-            android:parentActivityName="com.israteneda.notekeeper.SubItemsActivity"
-            android:label="@string/note_activity_label" />
+            android:name=".SubItemActivity"
+            android:label="@string/note_activity_label"
+            android:parentActivityName=".SubItemsActivity" />
     </application>
 
 </manifest>

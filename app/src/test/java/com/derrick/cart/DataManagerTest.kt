@@ -18,7 +18,7 @@ class DataManagerTest {
         val noteTile = "This is a test note"
         val noteText = "This is the body of my test note"
 
-        val index = DataManager.addNote(course, noteTile, noteText)
+        val index = DataManager.addList(course, noteTile, noteText)
         val note = DataManager.lists[index]
         assertEquals(course, note.course)
         assertEquals(noteTile, note.title)
@@ -32,14 +32,14 @@ class DataManagerTest {
         val noteText1 = "This is the body of my test note"
         val noteText2 = "This is the body of my second test note"
 
-        val index1 = DataManager.addNote(course, noteTitle, noteText1)
-        val index2 = DataManager.addNote(course, noteTitle, noteText2)
+        val index1 = DataManager.addList(course, noteTitle, noteText1)
+        val index2 = DataManager.addList(course, noteTitle, noteText2)
 
-        val note1 = DataManager.findNote(course, noteTitle, noteText1)
+        val note1 = DataManager.findList(course, noteTitle, noteText1)
         val foundIndex1 = DataManager.lists.indexOf(note1)
         assertEquals(index1, foundIndex1)
 
-        val note2 = DataManager.findNote(course, noteTitle, noteText2)
+        val note2 = DataManager.findList(course, noteTitle, noteText2)
         val foundIndex2 = DataManager.lists.indexOf(note2)
         assertEquals(index2, foundIndex2)
 

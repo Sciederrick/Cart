@@ -1,6 +1,4 @@
-package com.israteneda.notekeeper
-
-import android.util.Log
+package com.derrick.cart
 
 object DataManager {
     val lists = HashMap<String, ListInfo>()

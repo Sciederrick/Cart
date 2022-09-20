@@ -28,22 +28,22 @@ class ItemsActivityTest{
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_courses))
 
         val coursePosition = 0
-        onView(withId(R.id.listItems)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<CourseRecycleAdapter.ViewHolder>(coursePosition, click())
+        onView(withId(R.id.lists)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ListItemRecyclerAdapter.ViewHolder>(coursePosition, click())
         )
 
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open())
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.nav_notes))
 
         val notePosition = 0
-        onView(withId(R.id.listItems)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<CourseRecycleAdapter.ViewHolder>(coursePosition, click())
+        onView(withId(R.id.lists)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ListItemRecyclerAdapter.ViewHolder>(coursePosition, click())
         )
 
         val note = DataManager.lists[notePosition]
-        onView(withId(R.id.spinnerCourses)).check(matches(withSpinnerText(containsString(note.course?.title))))
-        onView(withId(R.id.textNoteTitle)).check(matches(withText(containsString(note.title))))
-        onView(withId(R.id.textNoteText)).check(matches(withText(containsString(note.text))))
+        onView(withId(R.id.spinnerLists)).check(matches(withSpinnerText(containsString(note.course?.title))))
+        onView(withId(R.id.newListItemTitle)).check(matches(withText(containsString(note.title))))
+        onView(withId(R.id.newListItemDescription)).check(matches(withText(containsString(note.text))))
 
     }
 

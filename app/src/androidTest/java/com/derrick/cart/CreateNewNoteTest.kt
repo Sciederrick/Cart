@@ -27,11 +27,11 @@ class CreateNewNoteTest{
 
         onView(withId(R.id.fab)).perform(click())
 
-        onView(withId(R.id.spinnerCourses)).perform(click())
+        onView(withId(R.id.spinnerLists)).perform(click())
         onData(allOf(instanceOf(CourseInfo::class.java), equalTo(course))).perform(click())
 
-        onView(withId(R.id.textNoteTitle)).perform(typeText(noteTile))
-        onView(withId(R.id.textNoteText)).perform(typeText(noteText), closeSoftKeyboard())
+        onView(withId(R.id.newListItemTitle)).perform(typeText(noteTile))
+        onView(withId(R.id.newListItemDescription)).perform(typeText(noteText), closeSoftKeyboard())
 
         pressBack()
 

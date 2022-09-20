@@ -23,7 +23,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include android:id="@+id/content_sub_items"
-        layout="@layout/content_sub_items" />
+        layout="@layout/content_sublist_items" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

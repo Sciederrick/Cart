@@ -1,4 +1,4 @@
-package com.israteneda.notekeeper
+package com.derrick.cart
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.israteneda.notekeeper.databinding.ActivityItemsBinding
+import com.derrick.cart.databinding.ActivityItemsBinding
 
 
 class ItemsActivity : AppCompatActivity(),
@@ -71,7 +71,8 @@ class ItemsActivity : AppCompatActivity(),
 
 
         fab.setOnClickListener {
-            startActivity(Intent(this, NoteActivity::class.java))
+            val modalBottomSheet = ModalBottomSheet()
+            modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
         }
 
         if (viewModel.isNewlyCreated && savedInstanceState != null) {

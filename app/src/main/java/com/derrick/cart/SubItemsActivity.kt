@@ -1,15 +1,13 @@
-package com.israteneda.notekeeper
+package com.derrick.cart
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.israteneda.notekeeper.DataManager.lists
-import com.israteneda.notekeeper.databinding.ActivitySubItemsBinding
+import com.derrick.cart.DataManager.lists
+import com.derrick.cart.databinding.ActivitySubItemsBinding
 
 class SubItemsActivity : AppCompatActivity() {
 
@@ -45,7 +43,7 @@ class SubItemsActivity : AppCompatActivity() {
         displayListItems()
 
         binding.fab.setOnClickListener {
-            val intent = Intent(this, NoteActivity::class.java)
+            val intent = Intent(this, SubItemActivity::class.java)
             startActivity(intent)
         }
     }
@@ -59,5 +57,7 @@ class SubItemsActivity : AppCompatActivity() {
         listItems.layoutManager = listItemLayoutManager
         listItems.adapter = listItemRecyclerAdapter
     }
+
+
 
 }

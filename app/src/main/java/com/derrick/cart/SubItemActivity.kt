@@ -1,6 +1,5 @@
-package com.israteneda.notekeeper
+package com.derrick.cart
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
-import com.israteneda.notekeeper.databinding.ActivityMainBinding
+import com.derrick.cart.databinding.ActivityMainBinding
 
-class NoteActivity : AppCompatActivity() {
+class SubItemActivity : AppCompatActivity() {
     private val tag = this::class.simpleName
     private var listItemPosition = POSITION_NOT_SET
 
@@ -105,6 +104,7 @@ class NoteActivity : AppCompatActivity() {
         return true
 
     }
+
 
 //    @SuppressLint("UseCompatLoadingForDrawables")
 //    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {

@@ -1,4 +1,4 @@
-package com.israteneda.notekeeper
+package com.derrick.cart
 
 import android.content.Context
 import android.content.Intent
@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class ListRecyclerAdapter(private val context: Context, private val lists: List<ListInfo>)
@@ -16,7 +15,7 @@ class ListRecyclerAdapter(private val context: Context, private val lists: List<
     private var onListSelectedListener: OnListSelectedListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = layoutInflater.inflate(R.layout.item_note_list, parent, false)
+        val itemView = layoutInflater.inflate(R.layout.item_list, parent, false)
         return ViewHolder(itemView)
     }
 

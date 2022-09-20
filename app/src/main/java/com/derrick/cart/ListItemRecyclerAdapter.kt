@@ -1,4 +1,4 @@
-package com.israteneda.notekeeper
+package com.derrick.cart
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -16,7 +16,7 @@ class ListItemRecyclerAdapter(private val context: Context, private val listItem
     private val layoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = layoutInflater.inflate(R.layout.item_course_list, parent, false)
+        val itemView = layoutInflater.inflate(R.layout.item_sublist, parent, false)
         return ViewHolder(itemView)
     }
 

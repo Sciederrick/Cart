@@ -20,20 +20,20 @@ class NextThroughNotes{
 
     @Test
     fun nextThroughNotes() {
-        onView(withId(R.id.listItems)).perform(
+        onView(withId(R.id.lists)).perform(
             RecyclerViewActions.actionOnItemAtPosition<ListRecyclerAdapter.ViewHolder>(0, click())
         )
 
         for(index in 0..DataManager.lists.lastIndex){
             val note = DataManager.lists[index]
 
-            onView(withId(R.id.spinnerCourses)).check(
+            onView(withId(R.id.spinnerLists)).check(
                 matches(withSpinnerText(note.course?.title))
             )
-            onView(withId(R.id.textNoteTitle)).check(
+            onView(withId(R.id.newListItemTitle)).check(
                 matches(withText(note.title))
             )
-            onView(withId(R.id.textNoteText)).check(
+            onView(withId(R.id.newListItemDescription)).check(
                 matches(withText(note.text))
             )
 
