@@ -12,6 +12,8 @@
         <item name="splashScreen">@style/SplashScreen</item>
         <item name="navHeader">@style/NavHeader.Green</item>
         <item name="itemListImageButton">@style/ItemListImageButton</item>
+        <!-- windowTranslucentStatus affects AppBar margins?!! -->
+<!--        <item name="android:windowTranslucentStatus">true</item>&lt;!&ndash; translucent status bar when navDrawer is opened &ndash;&gt;-->
     </style>
 
     <style name="Theme.AppBasic.NoActionBar">
