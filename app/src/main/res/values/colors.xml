@@ -6,6 +6,7 @@
     <color name="colorAccent">#44B7A2</color>
     <color name="colorBlack">#212427</color>
     <color name="colorStrikedOff">#330000</color>
+    <color name="colorDanger">#FF2400</color>
     <color name="colorNeutral">#F5F5F5</color>
     <color name="colorNeutralDark">#D9D9D9</color>
     <color name="colorMuted">#C9C4C4</color>

@@ -5,6 +5,8 @@
     <dimen name="card_view_margin_bottom">4dp</dimen>
     <dimen name="card_view_content_padding_right">2dp</dimen>
     <dimen name="min_clickable_height">48dp</dimen>
+    <dimen name="drawable_padding_left">32dp</dimen>
+    <dimen name="bottom_sheet_padding">32dp</dimen>
     <dimen name="image_item_sm">50dp</dimen>
     <dimen name="image_item_lg">300dp</dimen>
     <dimen name="rounded_corner_radius">8dp</dimen>

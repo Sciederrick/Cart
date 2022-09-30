@@ -5,12 +5,12 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_notes"
+            android:id="@+id/nav_lists"
             android:icon="@drawable/ic_list_24dp"
             android:checked="true"
             android:title="Lists" />
         <item
-            android:id="@+id/nav_courses"
+            android:id="@+id/nav_prices"
             android:icon="@drawable/ic_tag_price_24dp"
             android:title="Prices" />
 

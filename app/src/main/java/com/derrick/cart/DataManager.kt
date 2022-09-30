@@ -1,8 +1,13 @@
 package com.derrick.cart
 
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+
 object DataManager {
-    val lists = HashMap<String, ListInfo>()
-    val listItems = ArrayList<ListItem>()
+    val lists = hashMapOf<String, ListInfo>()
+    val listItems = arrayListOf<ListItem>()
+    var listsArray = arrayListOf<ListInfo>()
 
     init {
         initializeLists()
@@ -36,10 +41,6 @@ object DataManager {
         return tmp
     }
 
-//    fun loadNote(listId: Int) = lists[listId]
-
-//    fun isLastListId(listId: Int) = listId == lists.lastIndex
-
     private fun idOfList(list: ListInfo) = lists.values.indexOf(list)
 
     fun listIdsAsIntArray(list: List<ListInfo>): IntArray {
@@ -53,18 +54,14 @@ object DataManager {
         Thread.sleep(1000)
     }
 
-//    fun addList(id: String, listTitle: String, listTags: List<String>? = null): Int {
-//        val list = ListInfo(id, listTitle, listTags)
-//        lists.add(list)
-//        return lists.lastIndex
-//    }
-
-//    fun findList(id: String): ListInfo? {
-//        for (list in lists)
-//            if (id == list.id)
-//                return list
-//        return null
-//    }
+    fun addList(listTitle: String, listTags: List<String>? = null): Int {
+        val listId = UUID.randomUUID().toString()
+        val list = ListInfo(listId, listTitle, listTags)
+        val lastIndex = listsArray.size
+        lists[listId] = list
+        listsArray.add(list)
+        return lastIndex
+    }
 
     private fun initializeLists() {
         var list = ListInfo(listId="construction_project", title="Construction Project", tags=listOf("construction", "brick laying"))
@@ -75,6 +72,8 @@ object DataManager {
 
         list = ListInfo(listId="shopping", title="Shopping")
         lists[list.listId] = list
+
+        listsArray = loadLists() as ArrayList<ListInfo>
     }
 
     private fun initializeListItems() {

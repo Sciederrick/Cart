@@ -57,12 +57,14 @@
 
     <style name="TextTitle.Muted" parent="TextAppearance.AppCompat.Medium">
         <item name="android:color">@color/colorMuted</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextPageTitle" parent="TextTitle">
         <item name="android:textSize">@dimen/text_xl</item>
     </style>
 
+    <!-- Tints -->
     <style name="TintAccent">
         <item name="android:tint">@color/colorAccent</item>
     </style>
@@ -108,7 +110,7 @@
         <item name="android:layout_marginBottom">@dimen/card_view_margin_bottom</item>
     </style>
 
-    <style name="RoundedImageView" parent="">
+    <style name="RoundedImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/rounded_corner_radius</item>
     </style>

@@ -11,7 +11,7 @@ class ItemsActivityViewModel : ViewModel() {
     var recentlyViewedListIdsName =
         "com.israteneda.notekeeper.ItemsActivityViewModel.recentlyViewedListIds"
 
-    var navDrawerDisplaySelection = R.id.nav_notes
+    var navDrawerDisplaySelection = R.id.nav_lists
 
     private val maxRecentlyViewedLists = 3
     val recentlyViewedLists = ArrayList<ListInfo>(maxRecentlyViewedLists)

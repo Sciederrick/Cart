@@ -1,9 +1,16 @@
 package com.derrick.cart
 
-import android.content.Intent
+import android.app.SearchManager
+import android.content.ComponentName
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.EditText
+import android.widget.SearchView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,8 +20,10 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.derrick.cart.databinding.ActivityItemsBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class ItemsActivity : AppCompatActivity(),
@@ -31,16 +40,17 @@ class ItemsActivity : AppCompatActivity(),
     private lateinit var lists: RecyclerView
     /* bindings */
 
-    private val listLayoutManager by lazy { LinearLayoutManager(this) }
+    private val dialogNewList by lazy { BottomSheetDialog(this) }
+    private val dialogManageList by lazy { BottomSheetDialog(this) }
 
+    private val listLayoutManager by lazy { LinearLayoutManager(this) }
     private val listRecyclerAdapter by lazy {
-        val adapter = ListRecyclerAdapter(this, DataManager.loadLists())
+        val adapter = ListRecyclerAdapter(this, DataManager.listsArray, dialogManageList)
         adapter.setOnSelectedListener(this)
         adapter
     }
 
     private val listItemLayoutManager by lazy { LinearLayoutManager(this) }
-
     private val listItemRecyclerAdapter by lazy { ListItemRecyclerAdapter(this, DataManager.listItems) }
 
     private val recentlyViewedListsRecyclerAdapter by lazy {
@@ -54,7 +64,6 @@ class ItemsActivity : AppCompatActivity(),
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
         binding = ActivityItemsBinding.inflate(layoutInflater)
@@ -71,8 +80,7 @@ class ItemsActivity : AppCompatActivity(),
 
 
         fab.setOnClickListener {
-            val modalBottomSheet = ModalBottomSheet()
-            modalBottomSheet.show(supportFragmentManager, ModalBottomSheet.TAG)
+            showModalBottomSheet()
         }
 
         if (viewModel.isNewlyCreated && savedInstanceState != null) {
@@ -97,26 +105,56 @@ class ItemsActivity : AppCompatActivity(),
 
     }
 
+    private fun showModalBottomSheet() {
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_new_list, null)
 
-    private fun displayNotes() {
+        // set cancelable to avoid closing of dialog box when clicking on the screen.
+        dialogNewList.setCancelable(false)
+        // setting our view to our view.
+        dialogNewList.setContentView(view)
+        // a show method to display a dialog.
+        dialogNewList.show()
+
+        // action listeners
+        val btnCancel = view.findViewById<Button>(R.id.btnRenameListCancel)
+        btnCancel.setOnClickListener { dialogNewList.dismiss() }
+
+        val btnCreateNewList = view.findViewById<Button>(R.id.btnRenameListUpdate)
+        btnCreateNewList.setOnClickListener {
+            val txtInput = view.findViewById<EditText>(R.id.renameList)
+            val lastIndex = DataManager.addList(txtInput.text.toString())
+            dialogNewList.dismiss()
+            lists.adapter?.notifyItemInserted(lastIndex)
+        }
+    }
+
+
+    private fun displayLists() {
         lists.layoutManager = listLayoutManager
         lists.adapter = listRecyclerAdapter
 
-        navView.menu.findItem(R.id.nav_notes).isCheckable = true
+        navView.menu.findItem(R.id.nav_lists).isCheckable = true
     }
 
-    private fun displayCourses() {
+    private fun displayListItems() {
         lists.layoutManager = listItemLayoutManager
         lists.adapter = listItemRecyclerAdapter
 
-        navView.menu.findItem(R.id.nav_courses).isCheckable = true
+        navView.menu.findItem(R.id.nav_prices).isCheckable = true
     }
 
     private fun displayRecentlyViewedLists() {
         lists.layoutManager = listLayoutManager
         lists.adapter = recentlyViewedListsRecyclerAdapter
 
-        navView.menu.findItem(R.id.nav_courses).isCheckable = true
+        navView.menu.findItem(R.id.nav_prices).isCheckable = true
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // this forces the sheet to appear at max height even on landscape (credits: stackoverflow!)
+        dialogNewList.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialogManageList.behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun onResume() {
@@ -134,28 +172,29 @@ class ItemsActivity : AppCompatActivity(),
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.items, menu)
-        return true
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView?
+        searchView?.queryHint = getString(R.string.search_view_list)
+        searchView?.isIconifiedByDefault = false
+
+        val componentName = ComponentName(this, SearchResultActivity::class.java)
+        val searchableInfo = searchManager.getSearchableInfo(componentName)
+
+        searchView?.setSearchableInfo(searchableInfo)
+
+        return super.onCreateOptionsMenu(menu)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_notes,
-            R.id.nav_courses,
+            R.id.nav_lists,
+            R.id.nav_prices,
             R.id.nav_recently_notes -> {
                 handleDisplaySelection(item.itemId)
                 viewModel.navDrawerDisplaySelection = item.itemId
             }
-//            R.id.nav_share -> {
-//                handleSelection(R.string.nav_share_message)
-//            }
-//            R.id.nav_send -> {
-//                handleSelection(R.string.nav_send_message)
-//            }
-//            R.id.nav_how_many -> {
-//                val message = getString(R.string.nav_how_many_message_format,
-//                DataManager.lists.size, DataManager.courses.size)
-//                Snackbar.make(listItems, message, Snackbar.LENGTH_LONG).show()
-//            }
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)
@@ -164,11 +203,11 @@ class ItemsActivity : AppCompatActivity(),
 
     private fun handleDisplaySelection(itemId: Int) {
         when(itemId){
-            R.id.nav_notes -> {
-                displayNotes()
+            R.id.nav_lists -> {
+                displayLists()
             }
-            R.id.nav_courses -> {
-                displayCourses()
+            R.id.nav_prices -> {
+                displayListItems()
             }
             R.id.nav_recently_notes -> {
                 displayRecentlyViewedLists()
@@ -176,9 +215,6 @@ class ItemsActivity : AppCompatActivity(),
         }
     }
 
-//    private fun handleSelection(stringId: Int) {
-//        Snackbar.make(listItems, stringId, Snackbar.LENGTH_LONG).show()
-//    }
 
     override fun onListSelected(list: ListInfo) {
         viewModel.addToRecentlyViewedLists(list)
@@ -205,7 +241,6 @@ class ItemsActivity : AppCompatActivity(),
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if(outState != null)
-            viewModel.saveState(outState)
+        viewModel.saveState(outState)
     }
 }
