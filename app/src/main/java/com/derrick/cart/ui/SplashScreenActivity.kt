@@ -1,4 +1,4 @@
-package com.derrick.cart
+package com.derrick.cart.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
+import com.derrick.cart.R
 
 class SplashScreenActivity : AppCompatActivity() {
     private val postHandler = Handler(Looper.getMainLooper())

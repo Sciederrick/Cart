@@ -1,4 +1,4 @@
-package com.derrick.cart
+package com.derrick.cart.ui
 
 import android.app.SearchManager
 import android.content.Intent
