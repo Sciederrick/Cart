@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.derrick.cart.DATABASE_NAME
 import com.derrick.cart.models.Checklist
 
-@Database(entities = [Checklist::class], version = 1)
+@Database(entities = [Checklist::class], exportSchema = false, version = 1)
 abstract class CartRoomDatabase : RoomDatabase() {
     abstract fun checklistDao(): ChecklistDao
 

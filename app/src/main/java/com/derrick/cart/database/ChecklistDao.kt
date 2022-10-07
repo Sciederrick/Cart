@@ -7,22 +7,22 @@ import com.derrick.cart.models.Checklist
 @Dao
 interface ChecklistDao {
     @Insert
-    fun insertAll(vararg checklists: Checklist)
+    suspend fun insert(checklist: Checklist)
 
 //    @Query("SELECT * FROM checklist")
-//    fun getAll(): List<Checklist>
+//    fun getAll(): LiveData<List<Checklist>>
 
     @get:Query("SELECT * FROM checklist")
     val getAll: LiveData<List<Checklist>>
 
-    @Query("SELECT * FROM checklist WHERE title LIKE :searchString OR itemsChecked LIKE :searchString" +
+    @Query("SELECT * FROM checklist WHERE title LIKE :searchString OR items_checked LIKE :searchString" +
             " OR tags LIKE :searchString")
-    fun getByTitleOrItemsCheckedOrTags(searchString: String): List<Checklist>
+    suspend fun getByTitleOrItemsCheckedOrTags(searchString: String): List<Checklist>
 
     @Update
-    fun update(checklist: Checklist)
+    suspend fun update(checklist: Checklist)
 
     @Delete
-    fun delete(checklist: Checklist)
+    suspend fun delete(checklist: Checklist)
 
 }

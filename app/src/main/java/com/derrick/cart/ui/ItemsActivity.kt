@@ -3,20 +3,25 @@ package com.derrick.cart.ui
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.derrick.cart.CartApplication
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.viewmodels.ItemsActivityViewModel
-import com.derrick.cart.adapters.ListRecyclerAdapter
+import com.derrick.cart.adapters.ChecklistAdapter
 import com.derrick.cart.R
 import com.derrick.cart.databinding.ActivityItemsBinding
+import com.derrick.cart.viewmodels.ItemsActivityViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -24,7 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ItemsActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
-    ListRecyclerAdapter.OnListSelectedListener {
+    ChecklistAdapter.OnListSelectedListener {
     private val tag = "ItemsActivity"
 
     /* bindings */
@@ -33,7 +38,7 @@ class ItemsActivity : AppCompatActivity(),
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var navView: NavigationView
-    private lateinit var lists: RecyclerView
+    private lateinit var checklists: RecyclerView
     /* end of bindings */
 
     //BottomSheetDialogs
@@ -41,18 +46,23 @@ class ItemsActivity : AppCompatActivity(),
     private val dialogManageList by lazy { BottomSheetDialog(this) }
 
     //ViewModels
-    private val viewModel by lazy {
-        ViewModelProvider(this)[ItemsActivityViewModel::class.java]
+//    private val viewModel by lazy {
+//        ViewModelProvider(this)[ItemsActivityViewModel::class.java]
+//    }
+
+    private val viewModel: ItemsActivityViewModel by viewModels {
+        ItemsActivityViewModelFactory((application as CartApplication).repository)
     }
 
     //LayoutManagers
-    private val listLayoutManager by lazy { LinearLayoutManager(this) }
+    private val checklistLayoutManager by lazy { LinearLayoutManager(this) }
 //    private val listItemLayoutManager by lazy { LinearLayoutManager(this) }
 
     //RecyclerAdapters
-    private val listRecyclerAdapter by lazy {
+    private val checklistAdapter by lazy {
 //        val adapter = ListRecyclerAdapter(this, DataManager.listsArray, dialogManageList)
-        val adapter = ListRecyclerAdapter(this, null, dialogManageList)
+        val adapter = ChecklistAdapter(this)
+//        adapter.setOnSelectedListener(this, this)
         adapter.setOnSelectedListener(this)
         adapter
     }
@@ -72,21 +82,24 @@ class ItemsActivity : AppCompatActivity(),
         drawerLayout = binding.drawerLayout
         toolbar = binding.appBarItems.toolbar
         navView = binding.navView
-        lists = binding.appBarItems.contentItems.lists
+        checklists = binding.appBarItems.contentItems.checklists /*RecyclerView*/
 
         setContentView(binding.root)
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
 
-        viewModel.allChecklists.observe(this, Observer { checklists ->
+        viewModel.allChecklists.observe(this) { checklists ->
             checklists?.let {
-                listRecyclerAdapter.setChecklists(checklists)
+                checklistAdapter.setChecklists(it)
             }
-        })
+        }
 
-//        fab.setOnClickListener {
-//            showModalBottomSheet()
-//        }
+        checklists.layoutManager = checklistLayoutManager
+        checklists.adapter = checklistAdapter
+
+        fab.setOnClickListener {
+            showModalBottomSheet()
+        }
 
 //        if (viewModel.isNewlyCreated && savedInstanceState != null) {
 //            viewModel.restoreState(savedInstanceState)
@@ -110,28 +123,24 @@ class ItemsActivity : AppCompatActivity(),
 
     }
 
-//    private fun showModalBottomSheet() {
-//        val view = layoutInflater.inflate(R.layout.bottom_sheet_new_list, null)
-//
-//        // set cancelable to avoid closing of dialog box when clicking on the screen.
-//        dialogNewList.setCancelable(false)
-//        // setting our view to our view.
-//        dialogNewList.setContentView(view)
-//        // a show method to display a dialog.
-//        dialogNewList.show()
-//
-//        // action listeners
-//        val btnCancel = view.findViewById<Button>(R.id.btnRenameListCancel)
-//        btnCancel.setOnClickListener { dialogNewList.dismiss() }
-//
-//        val btnCreateNewList = view.findViewById<Button>(R.id.btnRenameListUpdate)
-//        btnCreateNewList.setOnClickListener {
-//            val txtInput = view.findViewById<EditText>(R.id.renameList)
-//            val lastIndex = DataManager.addList(txtInput.text.toString())
-//            dialogNewList.dismiss()
-//            lists.adapter?.notifyItemInserted(lastIndex)
-//        }
-//    }
+    private fun showModalBottomSheet() {
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_new_list, null)
+
+        dialogNewList.setCancelable(false)
+        dialogNewList.setContentView(view)
+        dialogNewList.show()
+
+        // action listeners
+        val btnCancel = view.findViewById<Button>(R.id.btnRenameListCancel)
+        btnCancel.setOnClickListener { dialogNewList.dismiss() }
+
+        val btnCreateNewList = view.findViewById<Button>(R.id.btnRenameListUpdate)
+        btnCreateNewList.setOnClickListener {
+            val txtInput = view.findViewById<EditText>(R.id.renameList)
+            viewModel.insert(Checklist(0, txtInput.text.toString(), null, 0))
+            dialogNewList.dismiss()
+        }
+    }
 
 
 //    private fun displayLists() {
@@ -221,9 +230,52 @@ class ItemsActivity : AppCompatActivity(),
     }
 
 
-    override fun onListSelected(list: Checklist) {
+    override fun onListSelected(checklist: Checklist) {
 //        viewModel.addToRecentlyViewedLists(list)
 //        updateNavViewHistory()
+    }
+
+    override fun onOverflowOptionsSelected(checklist: Checklist) {
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_manage_list, null)
+
+        // Title
+        val title = view.findViewById<TextView>(R.id.manageList)
+        title.text = checklist.title
+
+        dialogManageList.setContentView(view)
+        dialogManageList.show()
+
+        // GoTo Rename Button Action
+        val actionRename = view.findViewById<Button>(R.id.btnRenameList)
+        val renameView = layoutInflater.inflate(R.layout.bottom_sheet_rename_list, null)
+        // Title
+        val renameTitle = renameView.findViewById<EditText>(R.id.renameList)
+        renameTitle.setText(checklist.title)
+
+        actionRename.setOnClickListener {
+            dialogManageList.cancel()
+            dialogManageList.setContentView(renameView)
+            dialogManageList.show()
+
+            // Cancel Button Action -- go back to bottom_sheet_manage_list
+            val renameViewCancelBtn = renameView.findViewById<Button>(R.id.btnRenameListCancel)
+            renameViewCancelBtn.setOnClickListener {
+                dialogManageList.cancel()
+                dialogManageList.setContentView(view)
+                dialogManageList.show()
+            }
+
+            // Rename Button Action
+            val renameViewUpdateBtn = renameView.findViewById<Button>(R.id.btnRenameListUpdate)
+            renameViewUpdateBtn.setOnClickListener {
+                dialogManageList.cancel()
+                checklist.title = renameTitle.text.toString()
+
+                TODO("Add data layer logic for updating a checklist")
+
+                Toast.makeText(this, R.string.toast_rename_success, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 //    private fun updateNavViewHistory() {

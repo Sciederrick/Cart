@@ -31,7 +31,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/listTitle" />
 
             <ProgressBar
-                android:id="@+id/progressBar3"
+                android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:progress="25"
                 android:layout_width="150dp"

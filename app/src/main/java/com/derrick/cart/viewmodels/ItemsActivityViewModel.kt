@@ -1,20 +1,16 @@
 package com.derrick.cart.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.derrick.cart.repository.CartRepository
-import com.derrick.cart.database.CartRoomDatabase
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.R
+import kotlinx.coroutines.launch
 
-class ItemsActivityViewModel(application: Application) : AndroidViewModel(application) {
-    private val cartRepository = CartRepository(CartRoomDatabase.getInstance(application))
+class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewModel() {
     private val _checklists = MutableLiveData<List<Checklist>>()
     private val maxRecentlyViewedLists = 3
 
-    val allChecklists :LiveData<List<Checklist>> = cartRepository.allChecklists
+    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
     val recentlyViewedLists = ArrayList<Checklist>(maxRecentlyViewedLists)
     var isNewlyCreated = true
     var navDrawerDisplaySelectionName =
@@ -22,6 +18,10 @@ class ItemsActivityViewModel(application: Application) : AndroidViewModel(applic
     var recentlyViewedListIdsName =
         "com.israteneda.notekeeper.ItemsActivityViewModel.recentlyViewedListIds"
     var navDrawerDisplaySelection = R.id.nav_lists
+
+    fun insert(checklist: Checklist) = viewModelScope.launch {
+        cartRepository.insert(checklist)
+    }
 
     fun addToRecentlyViewedLists(checklist: Checklist) {
         val existingIndex = recentlyViewedLists.indexOf(checklist)

@@ -1,12 +1,13 @@
 package com.derrick.cart.models
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(tableName = "checklist")
 data class Checklist (
     @PrimaryKey(autoGenerate = true) val id: Int,
     var title: String?,
-    val tags: String?,
-    var itemsChecked: Int
+    var tags: String?,
+    @ColumnInfo(name = "items_checked") var itemsChecked: Int?
 )

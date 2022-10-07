@@ -1,4 +1,4 @@
-package com.derrick.cart.ui//package com.derrick.cart
+//package com.derrick.cart.ui//package com.derrick.cart
 //
 //import android.content.Intent
 //import android.os.Bundle
