@@ -7,10 +7,22 @@ import com.derrick.cart.R
 import kotlinx.coroutines.launch
 
 class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewModel() {
-    private val _checklists = MutableLiveData<List<Checklist>>()
+    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
+
+    fun insert(checklist: Checklist) = viewModelScope.launch {
+        cartRepository.insert(checklist)
+    }
+    fun update(checklist: Checklist) = viewModelScope.launch {
+        cartRepository.update(checklist)
+    }
+
+    fun delete(checklist: Checklist) = viewModelScope.launch {
+        cartRepository.delete(checklist)
+    }
+
+    // ---------------------------------------------------------------------------------------------
     private val maxRecentlyViewedLists = 3
 
-    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
     val recentlyViewedLists = ArrayList<Checklist>(maxRecentlyViewedLists)
     var isNewlyCreated = true
     var navDrawerDisplaySelectionName =
@@ -18,10 +30,6 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
     var recentlyViewedListIdsName =
         "com.israteneda.notekeeper.ItemsActivityViewModel.recentlyViewedListIds"
     var navDrawerDisplaySelection = R.id.nav_lists
-
-    fun insert(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.insert(checklist)
-    }
 
     fun addToRecentlyViewedLists(checklist: Checklist) {
         val existingIndex = recentlyViewedLists.indexOf(checklist)
@@ -35,6 +43,8 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
             recentlyViewedLists[0] = checklist
         }
     }
+
+    //----------------------------------------------------------------------------------------------
 
 //    fun saveState(outState: Bundle) {
 //        outState.putInt(navDrawerDisplaySelectionName, navDrawerDisplaySelection)

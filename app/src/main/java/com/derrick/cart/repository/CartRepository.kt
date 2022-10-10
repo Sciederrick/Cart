@@ -13,4 +13,14 @@ class CartRepository(private val checklistDao: ChecklistDao) {
     suspend fun insert(checklist: Checklist) {
         checklistDao.insert(checklist)
     }
+
+    @WorkerThread
+    suspend fun update(checklist: Checklist) {
+        checklistDao.update(checklist)
+    }
+
+    @WorkerThread
+    suspend fun delete(checklist: Checklist) {
+        checklistDao.delete(checklist)
+    }
 }

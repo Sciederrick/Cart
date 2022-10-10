@@ -3,6 +3,7 @@
     <string name="title_activity_note_list">NoteListActivity</string>
     <!-- Strings for Toast text -->
     <string name="toast_rename_success">Rename successful</string>
+    <string name="toast_delete_success">%1$s deleted</string>
     <!-- Strings for Drawer greeting -->
     <string name="morning">Morning!</string>
     <string name="afternoon">Afternoon!</string>

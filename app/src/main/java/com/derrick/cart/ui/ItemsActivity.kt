@@ -1,6 +1,7 @@
 package com.derrick.cart.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -11,6 +12,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -62,7 +65,6 @@ class ItemsActivity : AppCompatActivity(),
     private val checklistAdapter by lazy {
 //        val adapter = ListRecyclerAdapter(this, DataManager.listsArray, dialogManageList)
         val adapter = ChecklistAdapter(this)
-//        adapter.setOnSelectedListener(this, this)
         adapter.setOnSelectedListener(this)
         adapter
     }
@@ -176,6 +178,12 @@ class ItemsActivity : AppCompatActivity(),
 //        lists.adapter?.notifyDataSetChanged()
 //    }
 
+    override fun onPause() {
+        dialogManageList.dismiss()
+        dialogManageList.dismiss()
+        super.onPause()
+    }
+
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -215,8 +223,8 @@ class ItemsActivity : AppCompatActivity(),
         return true
     }
 
-    private fun handleDisplaySelection(itemId: Int) {
-        when(itemId){
+//    private fun handleDisplaySelection(itemId: Int) {
+//        when(itemId){
 //            R.id.nav_lists -> {
 //                displayLists()
 //            }
@@ -226,8 +234,8 @@ class ItemsActivity : AppCompatActivity(),
 //            R.id.nav_recently_notes -> {
 //                displayRecentlyViewedLists()
 //            }
-        }
-    }
+//        }
+//    }
 
 
     override fun onListSelected(checklist: Checklist) {
@@ -235,7 +243,7 @@ class ItemsActivity : AppCompatActivity(),
 //        updateNavViewHistory()
     }
 
-    override fun onOverflowOptionsSelected(checklist: Checklist) {
+    override fun onOverflowOptionsSelected(checklist: Checklist, checklistPosition: Int) {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_manage_list, null)
 
         // Title
@@ -270,11 +278,24 @@ class ItemsActivity : AppCompatActivity(),
             renameViewUpdateBtn.setOnClickListener {
                 dialogManageList.cancel()
                 checklist.title = renameTitle.text.toString()
-
-                TODO("Add data layer logic for updating a checklist")
+                viewModel.update(checklist)
 
                 Toast.makeText(this, R.string.toast_rename_success, Toast.LENGTH_LONG).show()
             }
+        }
+
+        // Delete Button Action
+        val deleteBtn = view.findViewById<Button>(R.id.btnDeleteList)
+        deleteBtn.setOnClickListener {
+            dialogManageList.dismiss()
+
+            viewModel.delete(checklist)
+
+//            checklistAdapter.notifyItemRemoved(checklistPosition)
+
+            Log.d(this::class.java.name, "checklist position: $checklistPosition")
+
+            Toast.makeText(this, getString(R.string.toast_delete_success, checklist.title), Toast.LENGTH_SHORT).show()
         }
     }
 

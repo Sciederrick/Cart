@@ -1,12 +1,14 @@
 package com.derrick.cart.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.R
@@ -42,7 +44,7 @@ class ChecklistAdapter(private val context: Context)
 
     fun setChecklists(checklists: List<Checklist>) {
         this.checklists = checklists
-        notifyItemInserted(checklists.size)
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -52,24 +54,23 @@ class ChecklistAdapter(private val context: Context)
 
         private val buttonListActions: ImageButton = itemView.findViewById(R.id.imageButtonListActions)
         var listPosition = 0
-        val checklist = checklists!![listPosition]
 
         init {
             itemView.setOnClickListener {
-                onListSelectedListener?.onListSelected(checklist)
+                onListSelectedListener?.onListSelected(checklists!![listPosition])
 //                val intent = Intent(context, SubItemsActivity::class.java)
 //                intent.putExtra(LIST_ITEM_POSITION, checkLists!![listPosition].id)
 //                context.startActivity(intent)
             }
 
             buttonListActions.setOnClickListener {
-                onListSelectedListener?.onOverflowOptionsSelected(checklist)
+                onListSelectedListener?.onOverflowOptionsSelected(checklists!![listPosition], listPosition)
             }
         }
     }
 
     interface OnListSelectedListener {
         fun onListSelected(checklist: Checklist)
-        fun onOverflowOptionsSelected(checklist: Checklist)
+        fun onOverflowOptionsSelected(checklist: Checklist, checklistPosition: Int)
     }
 }
