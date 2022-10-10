@@ -64,7 +64,7 @@ class ItemsActivity : AppCompatActivity(),
     //RecyclerAdapters
     private val checklistAdapter by lazy {
 //        val adapter = ListRecyclerAdapter(this, DataManager.listsArray, dialogManageList)
-        val adapter = ChecklistAdapter(this)
+        val adapter = ChecklistAdapter()
         adapter.setOnSelectedListener(this)
         adapter
     }
@@ -92,7 +92,7 @@ class ItemsActivity : AppCompatActivity(),
 
         viewModel.allChecklists.observe(this) { checklists ->
             checklists?.let {
-                checklistAdapter.setChecklists(it)
+                checklistAdapter.submitList(it)
             }
         }
 

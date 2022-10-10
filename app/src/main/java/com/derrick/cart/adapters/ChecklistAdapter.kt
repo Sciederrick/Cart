@@ -1,40 +1,31 @@
 package com.derrick.cart.adapters
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.R
 
-class ChecklistAdapter(private val context: Context)
-    : RecyclerView.Adapter<ChecklistAdapter.ViewHolder>() {
+class ChecklistAdapter
+    : ListAdapter<Checklist, ChecklistAdapter.ChecklistViewHolder>(CHECKLIST_COMPARATOR) {
 
-    private var checklists: List<Checklist>? = null
-    private val layoutInflater = LayoutInflater.from(context)
     private var onListSelectedListener: OnListSelectedListener? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = layoutInflater.inflate(R.layout.item_list, parent, false)
-        return ViewHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChecklistViewHolder {
+        val view: View = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_list, parent, false)
+        return ChecklistViewHolder(view)
     }
 
-    override fun getItemCount() = checklists?.size ?: 0
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val checklist = checklists?.get(position)
-        val checklistProgress = (checklist?.itemsChecked?.toDouble()?.div(5) ?: 0) as Double
-        val checklistProgressPercentage = (checklistProgress * 100).toInt()
-
-        holder.textTitle.text = checklist?.title
-        holder.itemsChecked.text = checklist?.itemsChecked.toString().plus("/${5}")
-        holder.progressBar.progress = checklistProgressPercentage
+    override fun onBindViewHolder(holder: ChecklistViewHolder, position: Int) {
+        val current = getItem(position)
+        holder.bind(current)
         holder.listPosition = position
     }
 
@@ -42,35 +33,54 @@ class ChecklistAdapter(private val context: Context)
         onListSelectedListener = listener
     }
 
-    fun setChecklists(checklists: List<Checklist>) {
-        this.checklists = checklists
-        notifyDataSetChanged()
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textTitle: TextView = itemView.findViewById(R.id.listTitle)
-        val itemsChecked: TextView = itemView.findViewById(R.id.itemsChecked)
-        val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
+    inner class ChecklistViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val textTitle: TextView = itemView.findViewById(R.id.listTitle)
+        private val itemsChecked: TextView = itemView.findViewById(R.id.itemsChecked)
+        private val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
 
         private val buttonListActions: ImageButton = itemView.findViewById(R.id.imageButtonListActions)
         var listPosition = 0
 
         init {
             itemView.setOnClickListener {
-                onListSelectedListener?.onListSelected(checklists!![listPosition])
+                onListSelectedListener?.onListSelected(getItem(listPosition))
 //                val intent = Intent(context, SubItemsActivity::class.java)
 //                intent.putExtra(LIST_ITEM_POSITION, checkLists!![listPosition].id)
 //                context.startActivity(intent)
             }
 
             buttonListActions.setOnClickListener {
-                onListSelectedListener?.onOverflowOptionsSelected(checklists!![listPosition], listPosition)
+                onListSelectedListener?.onOverflowOptionsSelected(getItem(listPosition), listPosition)
             }
         }
+
+        fun bind(checklist: Checklist) {
+            val checklistProgress = (checklist.itemsChecked?.toDouble()?.div(5) ?: 0) as Double
+            val checklistProgressPercentage = (checklistProgress * 100).toInt()
+
+            textTitle.text = checklist.title
+            itemsChecked.text = checklist.itemsChecked.toString().plus("/${5}")
+            progressBar.progress = checklistProgressPercentage
+        }
+
     }
 
     interface OnListSelectedListener {
         fun onListSelected(checklist: Checklist)
         fun onOverflowOptionsSelected(checklist: Checklist, checklistPosition: Int)
+    }
+
+    companion object {
+        private val CHECKLIST_COMPARATOR = object : DiffUtil.ItemCallback<Checklist>() {
+            override fun areItemsTheSame(oldItem: Checklist, newItem: Checklist): Boolean {
+                return oldItem === newItem
+            }
+
+            override fun areContentsTheSame(oldItem: Checklist, newItem: Checklist): Boolean {
+                return oldItem.title == newItem.title &&
+                        oldItem.tags == newItem.tags &&
+                        oldItem.itemsChecked == newItem.itemsChecked
+            }
+        }
     }
 }

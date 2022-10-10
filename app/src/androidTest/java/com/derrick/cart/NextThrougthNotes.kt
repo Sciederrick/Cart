@@ -1,4 +1,4 @@
-package com.israteneda.notekeeper
+package com.derrick.cart
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -7,6 +7,8 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
+import com.derrick.cart.adapters.ChecklistAdapter
+import com.derrick.cart.ui.ItemsActivity
 import org.hamcrest.Matchers.*
 import org.junit.Rule
 import org.junit.Test
@@ -20,8 +22,8 @@ class NextThroughNotes{
 
     @Test
     fun nextThroughNotes() {
-        onView(withId(R.id.lists)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ListRecyclerAdapter.ViewHolder>(0, click())
+        onView(withId(R.id.checklists)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<ChecklistAdapter.ViewHolder>(0, click())
         )
 
         for(index in 0..DataManager.lists.lastIndex){

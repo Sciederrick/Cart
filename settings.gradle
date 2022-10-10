@@ -1,2 +1,2 @@
-rootProject.name='NoteKeeper'
+rootProject.name='Cart'
 include ':app'
