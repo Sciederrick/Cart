@@ -9,6 +9,8 @@ import com.derrick.cart.models.Checklist
 class CartRepository(private val checklistDao: ChecklistDao) {
     val allChecklists: LiveData<List<Checklist>> = checklistDao.getAll
 
+    suspend fun checklists(ids: List<Int>) = checklistDao.getByIds(ids)
+
     @WorkerThread
     suspend fun insert(checklist: Checklist) {
         checklistDao.insert(checklist)

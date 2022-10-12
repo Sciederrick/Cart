@@ -1,7 +1,7 @@
 package com.derrick.cart.ui
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -12,8 +12,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,12 +27,17 @@ import com.derrick.cart.viewmodels.ItemsActivityViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 
 class ItemsActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
-    ChecklistAdapter.OnListSelectedListener {
-    private val tag = "ItemsActivity"
+    ChecklistAdapter.OnListSelectedListener, CoroutineScope {
+
+    private var job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
 
     /* bindings */
     private lateinit var binding: ActivityItemsBinding
@@ -125,46 +129,6 @@ class ItemsActivity : AppCompatActivity(),
 
     }
 
-    private fun showModalBottomSheet() {
-        val view = layoutInflater.inflate(R.layout.bottom_sheet_new_list, null)
-
-        dialogNewList.setCancelable(false)
-        dialogNewList.setContentView(view)
-        dialogNewList.show()
-
-        // action listeners
-        val btnCancel = view.findViewById<Button>(R.id.btnRenameListCancel)
-        btnCancel.setOnClickListener { dialogNewList.dismiss() }
-
-        val btnCreateNewList = view.findViewById<Button>(R.id.btnRenameListUpdate)
-        btnCreateNewList.setOnClickListener {
-            val txtInput = view.findViewById<EditText>(R.id.renameList)
-            viewModel.insert(Checklist(0, txtInput.text.toString(), null, 0))
-            dialogNewList.dismiss()
-        }
-    }
-
-
-//    private fun displayLists() {
-//        lists.layoutManager = listLayoutManager
-//        lists.adapter = listRecyclerAdapter
-//
-//        navView.menu.findItem(R.id.nav_lists).isCheckable = true
-//    }
-
-//    private fun displayListItems() {
-//        lists.layoutManager = listItemLayoutManager
-//        lists.adapter = listItemRecyclerAdapter
-//
-//        navView.menu.findItem(R.id.nav_prices).isCheckable = true
-//    }
-
-//    private fun displayRecentlyViewedLists() {
-//        lists.layoutManager = listLayoutManager
-//        lists.adapter = recentlyViewedListsRecyclerAdapter
-//
-//        navView.menu.findItem(R.id.nav_prices).isCheckable = true
-//    }
 
     override fun onStart() {
         super.onStart()
@@ -173,14 +137,33 @@ class ItemsActivity : AppCompatActivity(),
         dialogManageList.behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//        lists.adapter?.notifyDataSetChanged()
-//    }
+    override fun onResume() {
+        super.onResume()
+        // retrieve checklist history from SharedPreferences
+        val sharedPref = getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE
+        ) ?: return
+
+        launch {
+            viewModel.getChecklistHistory(this@ItemsActivity, sharedPref)
+
+            updateChecklistHistory()
+        }
+
+
+    }
 
     override fun onPause() {
         dialogManageList.dismiss()
         dialogManageList.dismiss()
+
+        // save checklist view history
+        val sharedPref = getSharedPreferences(
+            getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        )
+        viewModel.saveChecklistHistory(this, sharedPref)
+
         super.onPause()
     }
 
@@ -209,6 +192,7 @@ class ItemsActivity : AppCompatActivity(),
         return super.onCreateOptionsMenu(menu)
     }
 
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 //        when (item.itemId) {
 //            R.id.nav_lists,
@@ -223,6 +207,16 @@ class ItemsActivity : AppCompatActivity(),
         return true
     }
 
+
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        viewModel.saveState(outState)
+//    }
+
+
+//  Custom -----------------------------------------------------------------------------------------
+
+/*Navigation*/
 //    private fun handleDisplaySelection(itemId: Int) {
 //        when(itemId){
 //            R.id.nav_lists -> {
@@ -238,9 +232,38 @@ class ItemsActivity : AppCompatActivity(),
 //    }
 
 
+    private fun updateChecklistHistory() {
+        lateinit var title: String
+        lateinit var titleCondensed: String
+        lateinit var itemHistory: MenuItem
+
+        val target = navView.menu.findItem(R.id.nav_item_history).subMenu
+        target?.clear()
+
+        for (listItem in viewModel.recentlyViewedChecklists) {
+            title = listItem.title!!
+            titleCondensed = if (listItem.title?.length!! > 20) listItem.title?.slice(0..20)
+                .plus("...") else title
+            itemHistory = target!!.add(Menu.NONE, Menu.NONE, Menu.NONE, titleCondensed)
+            itemHistory.icon = AppCompatResources.getDrawable(this, R.drawable.ic_history_24dp)
+
+        }
+    }
+
+
+//    private fun displayRecentlyViewedLists() {
+//        lists.layoutManager = listLayoutManager
+//        lists.adapter = recentlyViewedListsRecyclerAdapter
+//
+//        navView.menu.findItem(R.id.nav_prices).isCheckable = true
+//    }
+/*End of Navigation*/
+
+
+/*Listeners*/
     override fun onListSelected(checklist: Checklist) {
-//        viewModel.addToRecentlyViewedLists(list)
-//        updateNavViewHistory()
+        viewModel.addToRecentlyViewedChecklists(checklist)
+        updateChecklistHistory()
     }
 
     override fun onOverflowOptionsSelected(checklist: Checklist, checklistPosition: Int) {
@@ -288,37 +311,51 @@ class ItemsActivity : AppCompatActivity(),
         val deleteBtn = view.findViewById<Button>(R.id.btnDeleteList)
         deleteBtn.setOnClickListener {
             dialogManageList.dismiss()
-
             viewModel.delete(checklist)
-
-//            checklistAdapter.notifyItemRemoved(checklistPosition)
-
-            Log.d(this::class.java.name, "checklist position: $checklistPosition")
-
             Toast.makeText(this, getString(R.string.toast_delete_success, checklist.title), Toast.LENGTH_SHORT).show()
         }
     }
+/*End of Listeners*/
 
-//    private fun updateNavViewHistory() {
-//        lateinit var title: String
-//        lateinit var titleCondensed: String
-//        lateinit var itemHistory: MenuItem
+/*Bottom Sheets*/
+    private fun showModalBottomSheet() {
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_new_list, null)
+
+        dialogNewList.setCancelable(false)
+        dialogNewList.setContentView(view)
+        dialogNewList.show()
+
+        // action listeners
+        val btnCancel = view.findViewById<Button>(R.id.btnRenameListCancel)
+        btnCancel.setOnClickListener { dialogNewList.dismiss() }
+
+        val btnCreateNewList = view.findViewById<Button>(R.id.btnRenameListUpdate)
+        btnCreateNewList.setOnClickListener {
+            val txtInput = view.findViewById<EditText>(R.id.renameList)
+            viewModel.insert(Checklist(0, txtInput.text.toString(), null, 0))
+            dialogNewList.dismiss()
+        }
+    }
+
+/*Bottom Sheets*/
+
+
+/*Display*/
+//    private fun displayLists() {
+//        lists.layoutManager = listLayoutManager
+//        lists.adapter = listRecyclerAdapter
 //
-//        val target = navView.menu.findItem(R.id.nav_item_history).subMenu
-//        target?.clear()
-//
-//        for (listItem in viewModel.recentlyViewedLists) {
-//            title = listItem.title!!
-//            titleCondensed = if (listItem.title?.length!! > 20) listItem.title?.slice(0..20)
-//                .plus("...") else title
-//            itemHistory = target!!.add(Menu.NONE, Menu.NONE, Menu.NONE, titleCondensed)
-//            itemHistory.icon = AppCompatResources.getDrawable(this, R.drawable.ic_history_24dp)
-//
-//        }
+//        navView.menu.findItem(R.id.nav_lists).isCheckable = true
 //    }
 
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        viewModel.saveState(outState)
+//    private fun displayListItems() {
+//        lists.layoutManager = listItemLayoutManager
+//        lists.adapter = listItemRecyclerAdapter
+//
+//        navView.menu.findItem(R.id.nav_prices).isCheckable = true
 //    }
+/*Display*/
+
+
+
 }

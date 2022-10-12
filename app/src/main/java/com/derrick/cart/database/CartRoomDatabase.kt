@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.derrick.cart.DATABASE_NAME
+import com.derrick.cart.R
 import com.derrick.cart.models.Checklist
 
 @Database(entities = [Checklist::class], exportSchema = false, version = 1)
@@ -22,7 +22,7 @@ abstract class CartRoomDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): CartRoomDatabase {
-            return Room.databaseBuilder(context, CartRoomDatabase::class.java, DATABASE_NAME)
+            return Room.databaseBuilder(context, CartRoomDatabase::class.java, R.string.database_name.toString())
                 .build()
         }
 

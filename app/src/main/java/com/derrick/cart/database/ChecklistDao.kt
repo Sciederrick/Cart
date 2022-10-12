@@ -9,11 +9,11 @@ interface ChecklistDao {
     @Insert
     suspend fun insert(checklist: Checklist)
 
-//    @Query("SELECT * FROM checklist")
-//    fun getAll(): LiveData<List<Checklist>>
-
     @get:Query("SELECT * FROM checklist")
     val getAll: LiveData<List<Checklist>>
+
+    @Query("SELECT * FROM checklist WHERE id IN (:ids)")
+    suspend fun getByIds(ids: List<Int>): List<Checklist>
 
     @Query("SELECT * FROM checklist WHERE title LIKE :searchString OR items_checked LIKE :searchString" +
             " OR tags LIKE :searchString")
