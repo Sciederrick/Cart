@@ -4,13 +4,13 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
-import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
@@ -18,15 +18,16 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CartApplication
+import com.derrick.cart.R
+import com.derrick.cart.adapters.ChecklistAdapter
+import com.derrick.cart.databinding.ActivityItemsBinding
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.viewmodels.ItemsActivityViewModel
-import com.derrick.cart.adapters.ChecklistAdapter
-import com.derrick.cart.R
-import com.derrick.cart.databinding.ActivityItemsBinding
 import com.derrick.cart.viewmodels.ItemsActivityViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -91,8 +92,23 @@ class ItemsActivity : AppCompatActivity(),
         checklists = binding.appBarItems.contentItems.checklists /*RecyclerView*/
 
         setContentView(binding.root)
+
         setSupportActionBar(toolbar)
         supportActionBar?.title = ""
+
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(AppCompatResources.getDrawable(this, R.drawable.ic_menu_2_24dp))
+
+        navView.setNavigationItemSelectedListener(this)
 
         viewModel.allChecklists.observe(this) { checklists ->
             checklists?.let {
@@ -114,18 +130,8 @@ class ItemsActivity : AppCompatActivity(),
 //        viewModel.isNewlyCreated = false
 //        handleDisplaySelection(viewModel.navDrawerDisplaySelection)
 
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
         // when there's a configuration change repopulate from viewModel
 //        updateNavViewHistory()
-
-        navView.setNavigationItemSelectedListener(this)
 
     }
 
