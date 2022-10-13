@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
@@ -23,7 +22,8 @@ import com.derrick.cart.adapters.ChecklistAdapter
 import com.derrick.cart.databinding.ActivityItemsBinding
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.viewmodels.ItemsActivityViewModel
-import com.derrick.cart.viewmodels.ItemsActivityViewModelFactory
+import com.derrick.cart.viewmodels.SearchViewModel
+import com.derrick.cart.viewmodels.SearchViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -57,8 +57,8 @@ class SearchResultActivity : AppCompatActivity(),
 //        ViewModelProvider(this)[ItemsActivityViewModel::class.java]
 //    }
 
-    private val viewModel: ItemsActivityViewModel by viewModels {
-        ItemsActivityViewModelFactory((application as CartApplication).repository)
+    private val viewModel: SearchViewModel by viewModels {
+        SearchViewModelFactory((application as CartApplication).repository)
     }
 
     //LayoutManagers
