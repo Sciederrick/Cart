@@ -30,7 +30,7 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
     fun getChecklistsByTitleOrItemsCheckedOrTags(
         searchQuery: String
     ) :LiveData<List<Checklist>> {
-        return cartRepository.filterChecklists(searchQuery)
+        return cartRepository.filterChecklists("%$searchQuery%")
     }
 
     // list view history----------------------------------------------------------------------------
