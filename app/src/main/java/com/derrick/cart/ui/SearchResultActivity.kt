@@ -93,20 +93,9 @@ class SearchResultActivity : AppCompatActivity(),
         fab.visibility = View.INVISIBLE
 
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        // Modify default hamburger icon
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(AppCompatResources.getDrawable(this, R.drawable.ic_menu_2_24dp))
 
         navView.setNavigationItemSelectedListener(this)
 
@@ -206,6 +195,16 @@ class SearchResultActivity : AppCompatActivity(),
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 
