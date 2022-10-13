@@ -11,6 +11,10 @@ class CartRepository(private val checklistDao: ChecklistDao) {
 
     suspend fun checklists(ids: List<Int>) = checklistDao.getByIds(ids)
 
+    fun filterChecklists(searchQuery: String): LiveData<List<Checklist>> {
+        return checklistDao.getByTitleOrItemsCheckedOrTags(searchQuery)
+    }
+
     @WorkerThread
     suspend fun insert(checklist: Checklist) {
         checklistDao.insert(checklist)

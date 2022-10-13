@@ -2,7 +2,6 @@ package com.derrick.cart.viewmodels
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.*
 import com.derrick.cart.repository.CartRepository
 import com.derrick.cart.models.Checklist
@@ -24,8 +23,14 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
         cartRepository.delete(checklist)
     }
 
-    private fun checklists(ids: List<Int>) = viewModelScope.async {
+    private fun checklistsAsync(ids: List<Int>) = viewModelScope.async {
         cartRepository.checklists(ids)
+    }
+
+    fun getChecklistsByTitleOrItemsCheckedOrTags(
+        searchQuery: String
+    ) :LiveData<List<Checklist>> {
+        return cartRepository.filterChecklists(searchQuery)
     }
 
     // list view history----------------------------------------------------------------------------
@@ -64,7 +69,7 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
 
         if (checklistIds?.isEmpty() == true) return
 
-        recentlyViewedChecklists = checklists(checklistIds!!).await() as ArrayList<Checklist>
+        recentlyViewedChecklists = checklistsAsync(checklistIds!!).await() as ArrayList<Checklist>
 
     }
 

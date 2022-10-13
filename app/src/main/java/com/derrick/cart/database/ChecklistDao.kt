@@ -17,7 +17,7 @@ interface ChecklistDao {
 
     @Query("SELECT * FROM checklist WHERE title LIKE :searchString OR items_checked LIKE :searchString" +
             " OR tags LIKE :searchString")
-    suspend fun getByTitleOrItemsCheckedOrTags(searchString: String): List<Checklist>
+    fun getByTitleOrItemsCheckedOrTags(searchString: String): LiveData<List<Checklist>>
 
     @Update
     suspend fun update(checklist: Checklist)

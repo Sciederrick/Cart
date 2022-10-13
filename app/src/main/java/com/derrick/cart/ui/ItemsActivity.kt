@@ -1,14 +1,13 @@
 package com.derrick.cart.ui
 
+import android.app.SearchManager
+import android.content.ComponentName
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -84,7 +83,6 @@ class ItemsActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
 
         binding = ActivityItemsBinding.inflate(layoutInflater)
-
         fab = binding.appBarItems.fab
         drawerLayout = binding.drawerLayout
         toolbar = binding.appBarItems.toolbar
@@ -105,6 +103,7 @@ class ItemsActivity : AppCompatActivity(),
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
+        // Modify default hamburger icon
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(AppCompatResources.getDrawable(this, R.drawable.ic_menu_2_24dp))
 
@@ -184,16 +183,16 @@ class ItemsActivity : AppCompatActivity(),
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.items, menu)
 
-//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-//        val searchItem = menu.findItem(R.id.action_search)
-//        val searchView = searchItem.actionView as SearchView?
-//        searchView?.queryHint = getString(R.string.search_view_list)
-//        searchView?.isIconifiedByDefault = false
-//
-//        val componentName = ComponentName(this, SearchResultActivity::class.java)
-//        val searchableInfo = searchManager.getSearchableInfo(componentName)
-//
-//        searchView?.setSearchableInfo(searchableInfo)
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView?
+        searchView?.queryHint = getString(R.string.search_view_list)
+        searchView?.isIconifiedByDefault = false
+
+        val componentName = ComponentName(this, SearchResultActivity::class.java)
+        val searchableInfo = searchManager.getSearchableInfo(componentName)
+
+        searchView?.setSearchableInfo(searchableInfo)
 
         return super.onCreateOptionsMenu(menu)
     }
