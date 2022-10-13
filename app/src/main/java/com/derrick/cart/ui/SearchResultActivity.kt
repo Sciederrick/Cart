@@ -167,7 +167,11 @@ class SearchResultActivity : AppCompatActivity(),
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.items, menu)
+        // Hide Action Buttons & Action Overflow
+        menu.findItem(R.id.action_settings).isVisible = false
+        menu.findItem(R.id.action_search).isVisible = false
 
+        // Configure Search
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView?
