@@ -65,5 +65,15 @@
     <string name="database_name" translatable="false">cart-db</string>
     <string name="preference_file_key" translatable="false">com.derrick.cart.my-pref</string>
     <string name="viewed_checklist_history" translatable="false">com.derrick.cart.viewed_list_history</string>
+    <string-array name="pref_application_theme">
+        <item>System default</item>
+        <item>River rock</item>
+        <item>Woody</item>
+    </string-array>
+    <string-array name="pref_values_application_theme">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 
 </resources>

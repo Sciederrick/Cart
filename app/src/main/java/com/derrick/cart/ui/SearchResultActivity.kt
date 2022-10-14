@@ -21,7 +21,6 @@ import com.derrick.cart.R
 import com.derrick.cart.adapters.ChecklistAdapter
 import com.derrick.cart.databinding.ActivityItemsBinding
 import com.derrick.cart.models.Checklist
-import com.derrick.cart.viewmodels.ItemsActivityViewModel
 import com.derrick.cart.viewmodels.SearchViewModel
 import com.derrick.cart.viewmodels.SearchViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -166,7 +165,7 @@ class SearchResultActivity : AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.items, menu)
+        menuInflater.inflate(R.menu.appbar_actions, menu)
         // Hide Action Buttons & Action Overflow
         menu.findItem(R.id.action_settings).isVisible = false
         menu.findItem(R.id.action_search).isVisible = false

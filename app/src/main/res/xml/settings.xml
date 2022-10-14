@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:key="pref_category_display_options"
+        app:title="Display options"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:title="Add new items to bottom"
+            android:key="pref_new_items_to_bottom"
+            android:defaultValue="true"/>
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:title="Move ticked items to bottom"
+            android:key="pref_ticked_items_to_bottom"
+            android:defaultValue="true"/>
+        <ListPreference
+            app:iconSpaceReserved="false"
+            android:defaultValue="1"
+            android:dialogTitle="Theme"
+            android:entries="@array/pref_application_theme"
+            android:entryValues="@array/pref_values_application_theme"
+            android:key="pref_application_theme"
+            android:title="Theme"
+            android:summary="Look and feel of the user interface."/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="pref_category_reminders"
+        app:title="Reminders"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:title="Location reminders"
+            android:key="pref_location_reminders"
+            android:defaultValue="false"
+            android:summary="Get a notification when you are close to a store. Requires location permission."/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="pref_category_prices"
+        app:title="Prices"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:title="Enable prices"
+            android:key="pref_enable_prices"
+            android:defaultValue="false"
+            android:summary="Allow the application to fetch prices via your network."/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="pref_category_sharing"
+        app:title="Sharing"
+        app:iconSpaceReserved="false"
+        app:allowDividerAbove="false">
+        <SwitchPreferenceCompat
+            app:iconSpaceReserved="false"
+            android:title="Enable sharing"
+            android:key="pref_enable_sharing"
+            android:defaultValue="true"
+            android:summary="Share checklists with your friends &amp; family."/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

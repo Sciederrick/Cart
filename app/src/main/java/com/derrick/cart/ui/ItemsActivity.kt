@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -182,7 +181,7 @@ class ItemsActivity : AppCompatActivity(),
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.items, menu)
+        menuInflater.inflate(R.menu.appbar_actions, menu)
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem = menu.findItem(R.id.action_search)
@@ -198,16 +197,18 @@ class ItemsActivity : AppCompatActivity(),
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.action_settings -> gotoSettings()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.nav_lists,
-//            R.id.nav_prices,
-//            R.id.nav_recently_notes -> {
-//                handleDisplaySelection(item.itemId)
-//                viewModel.navDrawerDisplaySelection = item.itemId
-//            }
-//        }
+        when(item.itemId) {
+            R.id.nav_settings -> gotoSettings()
+        }
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -256,6 +257,9 @@ class ItemsActivity : AppCompatActivity(),
         }
     }
 
+    private fun gotoSettings() {
+        startActivity(Intent(this, SettingsActivity::class.java))
+    }
 
 //    private fun displayRecentlyViewedLists() {
 //        lists.layoutManager = listLayoutManager

@@ -67,9 +67,13 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutines"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
 
-    //UI
+    // UI
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraintLayoutVersion"
     implementation "com.google.android.material:material:$rootProject.materialVersion"
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
+
+    // Preference library
+    implementation "androidx.preference:preference-ktx:$rootProject.preferenceVersion"
 
     //Testing
     testImplementation "junit:junit:$rootProject.junitVersion"
