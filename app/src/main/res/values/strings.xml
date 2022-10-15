@@ -65,6 +65,23 @@
     <string name="database_name" translatable="false">cart-db</string>
     <string name="preference_file_key" translatable="false">com.derrick.cart.my-pref</string>
     <string name="viewed_checklist_history" translatable="false">com.derrick.cart.viewed_list_history</string>
+
+    <!-- Settings Preferences -->
+    <string name="pref_category_display_options_title">Display options</string>
+    <string name="pref_new_items_to_bottom_title">Add new items to bottom</string>
+    <string name="pref_ticked_items_to_bottom_title">Move ticked items to bottom</string>
+    <string name="pref_application_theme_dialog_title">Theme</string>
+    <string name="pref_application_theme_title">Theme</string>
+    <string name="pref_application_theme_summary">Look and feel of the user interface.</string>
+    <string name="pref_category_reminders_title">Reminders</string>
+    <string name="pref_location_reminders_title">Location reminders</string>
+    <string name="pref_location_reminders_summary">Get a notification when you are close to a store. Requires location permission.</string>
+    <string name="pref_category_prices_title">Prices</string>
+    <string name="pref_enable_prices_title">Enable prices</string>
+    <string name="pref_enable_prices_summary">Allow the application to fetch prices via your network.</string>
+    <string name="pref_category_sharing_title">Sharing</string>
+    <string name="pref_enable_sharing_title">Enable sharing</string>
+    <string name="pref_enable_sharing_summary">Share checklists with your friends &amp; family.</string>
     <string-array name="pref_application_theme">
         <item>System default</item>
         <item>River rock</item>
