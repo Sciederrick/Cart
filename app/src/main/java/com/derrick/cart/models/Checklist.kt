@@ -9,5 +9,6 @@ data class Checklist (
     @PrimaryKey(autoGenerate = true) val id: Int,
     var title: String?,
     var tags: String?,
-    @ColumnInfo(name = "items_checked") var itemsChecked: Int?
+    @ColumnInfo(name = "items_checked") var itemsChecked: Int?,
+    var size: Int?
 )

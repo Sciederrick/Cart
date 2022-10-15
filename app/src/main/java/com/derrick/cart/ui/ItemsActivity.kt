@@ -342,7 +342,7 @@ class ItemsActivity : AppCompatActivity(),
         val btnCreateNewList = view.findViewById<Button>(R.id.btnRenameListUpdate)
         btnCreateNewList.setOnClickListener {
             val txtInput = view.findViewById<EditText>(R.id.renameList)
-            viewModel.insert(Checklist(0, txtInput.text.toString(), null, 0))
+            viewModel.insert(Checklist(0, txtInput.text.toString(), null, 0, 0))
             dialogNewList.dismiss()
         }
     }
