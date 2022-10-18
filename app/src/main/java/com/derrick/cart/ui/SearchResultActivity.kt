@@ -120,6 +120,23 @@ class SearchResultActivity : AppCompatActivity(),
 
     }
 
+    /*Search*/
+    private fun handleIntent(intent: Intent) {
+        if (intent.action == Intent.ACTION_SEARCH) {
+            val searchQuery = intent.getStringExtra(SearchManager.QUERY)
+            supportActionBar?.subtitle = "results for \"$searchQuery\""
+
+            searchQuery?.let {
+                viewModel.getChecklistsByTitleOrItemsCheckedOrTags(searchQuery).observe(this) {
+                    it?.let {
+                        checklistAdapter.setChecklists(it)
+                    }
+                }
+            }
+        }
+    }
+    /*Search*/
+
 
     override fun onStart() {
         super.onStart()
@@ -171,16 +188,16 @@ class SearchResultActivity : AppCompatActivity(),
         menu.findItem(R.id.action_search).isVisible = false
 
         // Configure Search
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView?
-        searchView?.queryHint = getString(R.string.search_view_list)
-        searchView?.isIconifiedByDefault = false
-
-        val componentName = ComponentName(this, SearchResultActivity::class.java)
-        val searchableInfo = searchManager.getSearchableInfo(componentName)
-
-        searchView?.setSearchableInfo(searchableInfo)
+//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+//        val searchItem = menu.findItem(R.id.action_search)
+//        val searchView = searchItem.actionView as SearchView?
+//        searchView?.queryHint = getString(R.string.search_view_list)
+//        searchView?.isIconifiedByDefault = false
+//
+//        val componentName = ComponentName(this, SearchResultActivity::class.java)
+//        val searchableInfo = searchManager.getSearchableInfo(componentName)
+//
+//        searchView?.setSearchableInfo(searchableInfo)
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -320,21 +337,7 @@ class SearchResultActivity : AppCompatActivity(),
     }
 /*End of Listeners*/
 
-    /*Search*/
-    private fun handleIntent(intent: Intent) {
-        if (intent.action == Intent.ACTION_SEARCH) {
-            val searchQuery = intent.getStringExtra(SearchManager.QUERY)
 
-            searchQuery?.let {
-                viewModel.getChecklistsByTitleOrItemsCheckedOrTags(searchQuery).observe(this) {
-                    it?.let {
-                        checklistAdapter.setChecklists(it)
-                    }
-                }
-            }
-        }
-    }
-    /*Search*/
 /*Display*/
 //    private fun displayLists() {
 //        lists.layoutManager = listLayoutManager

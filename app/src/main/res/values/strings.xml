@@ -42,8 +42,8 @@
     <string name="list_item_desc_hint">Item description</string>
     <string name="list_item_title_hint">Item title</string>
     <string name="list_item_quantity">1</string>
-    <string name="search_view_list">search lists</string>
-    <string name="search_view_list_items">search list items</string>
+    <string name="search_checklist_hint">Search lists</string>
+    <string name="search_view_list_items">Search list items</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -93,4 +93,5 @@
         <item>2</item>
     </string-array>
 
+    <!-- App Search -->
 </resources>

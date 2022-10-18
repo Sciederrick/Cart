@@ -186,7 +186,7 @@ class ItemsActivity : AppCompatActivity(),
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView?
-        searchView?.queryHint = getString(R.string.search_view_list)
+
         searchView?.isIconifiedByDefault = false
 
         val componentName = ComponentName(this, SearchResultActivity::class.java)
