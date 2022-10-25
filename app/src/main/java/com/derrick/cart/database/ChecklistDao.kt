@@ -15,6 +15,9 @@ interface ChecklistDao {
     @Query("SELECT * FROM checklist WHERE id IN (:ids)")
     suspend fun getByIds(ids: List<Int>): List<Checklist>
 
+    @Query("SELECT * FROM checklist")
+    suspend fun getAllAsync(): List<Checklist>?
+
     @Query("SELECT * FROM checklist WHERE title LIKE :searchString OR items_checked LIKE :searchString" +
             " OR tags LIKE :searchString")
     fun getByTitleOrItemsCheckedOrTags(searchString: String): LiveData<List<Checklist>>

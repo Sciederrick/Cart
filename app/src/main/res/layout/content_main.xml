@@ -14,7 +14,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <EditText
-            android:id="@+id/newListItemTitle"
+            android:id="@+id/editListItemTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -23,12 +23,13 @@
             android:hint="@string/list_item_title_hint"
             android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
             android:minHeight="@dimen/min_clickable_height"
+            android:backgroundTint="@color/colorMuted"
             app:layout_constraintEnd_toEndOf="@+id/spinnerLists"
             app:layout_constraintStart_toStartOf="@+id/spinnerLists"
             app:layout_constraintTop_toBottomOf="@+id/spinnerLists" />
 
         <EditText
-            android:id="@+id/newListItemDescription"
+            android:id="@+id/editListItemDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -37,10 +38,11 @@
             android:hint="@string/list_item_desc_hint"
             android:inputType="textMultiLine|textAutoCorrect"
             android:minHeight="@dimen/min_clickable_height"
+            android:backgroundTint="@color/colorMuted"
             app:layout_constraintEnd_toEndOf="@+id/spinnerLists"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/spinnerLists"
-            app:layout_constraintTop_toBottomOf="@+id/newListItemTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/editListItemTitle" />
 
         <Spinner
             android:id="@+id/spinnerLists"
@@ -64,12 +66,13 @@
             android:hint="@string/list_item_quantity"
             android:inputType="numberDecimal"
             android:minHeight="@dimen/min_clickable_height"
-            android:text="1"
+            android:text="@string/default_quantity"
+            android:backgroundTint="@color/colorMuted"
             app:layout_constraintEnd_toStartOf="@+id/textView"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="@+id/spinnerLists"
-            app:layout_constraintTop_toBottomOf="@+id/newListItemDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/editListItemDescription" />
 
         <TextView
             android:id="@+id/textView"
@@ -80,7 +83,7 @@
             app:layout_constraintEnd_toStartOf="@+id/editListItemPrice"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/editListItemQuantity"
-            app:layout_constraintTop_toBottomOf="@+id/newListItemDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/editListItemDescription" />
 
         <EditText
             android:id="@+id/editListItemPrice"
@@ -90,12 +93,13 @@
             android:ems="7"
             android:inputType="none|numberDecimal"
             android:minHeight="@dimen/min_clickable_height"
-            android:text="0.00"
+            android:text="@string/default_price"
             android:textAlignment="textEnd"
+            android:backgroundTint="@color/colorMuted"
             app:layout_constraintEnd_toStartOf="@+id/listItemCurrency"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/newListItemDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/editListItemDescription" />
 
         <TextView
             android:id="@+id/listItemCurrency"
@@ -103,11 +107,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:text="KES"
+            android:text="@string/default_currency"
             app:layout_constraintEnd_toEndOf="@+id/spinnerLists"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/editListItemPrice"
-            app:layout_constraintTop_toBottomOf="@+id/newListItemDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/editListItemDescription" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/group"
@@ -121,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
             android:background="@drawable/rounded_rectangle_2"
-            app:layout_constraintEnd_toEndOf="@+id/newListItemDescription"
+            app:layout_constraintEnd_toEndOf="@+id/editListItemDescription"
             app:layout_constraintStart_toStartOf="@+id/editListItemQuantity"
             app:layout_constraintTop_toBottomOf="@+id/editListItemPrice"
             android:animateLayoutChanges="true">

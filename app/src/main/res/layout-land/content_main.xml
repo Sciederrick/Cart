@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <EditText
-        android:id="@+id/newListItemTitle"
+        android:id="@+id/editListItemTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toBottomOf="@+id/spinnerLists" />
 
     <EditText
-        android:id="@+id/newListItemDescription"
+        android:id="@+id/editListItemDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

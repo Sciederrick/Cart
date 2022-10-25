@@ -43,8 +43,8 @@ class ItemsActivityTest{
 
         val note = DataManager.lists[notePosition]
         onView(withId(R.id.spinnerLists)).check(matches(withSpinnerText(containsString(note.course?.title))))
-        onView(withId(R.id.newListItemTitle)).check(matches(withText(containsString(note.title))))
-        onView(withId(R.id.newListItemDescription)).check(matches(withText(containsString(note.text))))
+        onView(withId(R.id.editListItemTitle)).check(matches(withText(containsString(note.title))))
+        onView(withId(R.id.editListItemDescription)).check(matches(withText(containsString(note.text))))
 
     }
 

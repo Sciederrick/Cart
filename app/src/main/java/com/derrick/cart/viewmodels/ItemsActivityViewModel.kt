@@ -12,15 +12,15 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
     val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
 
     fun insert(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.insert(checklist)
+        cartRepository.insertChecklist(checklist)
     }
 
     fun update(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.update(checklist)
+        cartRepository.updateChecklist(checklist)
     }
 
     fun delete(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.delete(checklist)
+        cartRepository.deleteChecklist(checklist)
     }
 
     private fun checklistsAsync(ids: List<Int>) = viewModelScope.async {

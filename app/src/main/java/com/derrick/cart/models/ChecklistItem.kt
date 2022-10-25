@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 @Entity(tableName = "checklist_item", foreignKeys = [ForeignKey(
     entity = Checklist::class,
@@ -11,9 +12,11 @@ import androidx.room.PrimaryKey
     parentColumns = ["id"]
 )]
 )
+
+@Serializable
 data class ChecklistItem (
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "checklist_id") var checklistId: Int,
+    @PrimaryKey(autoGenerate = true) var id: Long,
+    @ColumnInfo(name = "checklist_id", index = true) var checklistId: Long,
     var title: String?,
     var description: String?,
     var quantity: Float?,

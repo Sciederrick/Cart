@@ -44,6 +44,9 @@
     <string name="list_item_quantity">1</string>
     <string name="search_checklist_hint">Search lists</string>
     <string name="search_view_list_items">Search list items</string>
+    <string name="default_quantity">1</string>
+    <string name="default_price">0.00</string>
+    <string name="default_currency">KES</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -1,6 +1,7 @@
 package com.derrick.cart.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,10 +9,13 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.derrick.cart.CHECKLIST
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.R
+import com.derrick.cart.ui.SubItemsActivity
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class ChecklistAdapter(private val context: Context)
     : RecyclerView.Adapter<ChecklistAdapter.ViewHolder>() {
@@ -35,7 +39,7 @@ class ChecklistAdapter(private val context: Context)
         holder.textTitle.text = checklist?.title
         holder.itemsChecked.text = checklist?.itemsChecked.toString().plus("/${5}")
         holder.progressBar.progress = checklistProgressPercentage
-        holder.listPosition = position
+        holder.checklistPosition = position
     }
 
     fun setOnSelectedListener(listener: OnListSelectedListener) {
@@ -53,18 +57,21 @@ class ChecklistAdapter(private val context: Context)
         val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar)
 
         private val buttonListActions: ImageButton = itemView.findViewById(R.id.imageButtonListActions)
-        var listPosition = 0
+        var checklistPosition = 0
 
         init {
             itemView.setOnClickListener {
-                onListSelectedListener?.onListSelected(checklists!![listPosition])
-//                val intent = Intent(context, SubItemsActivity::class.java)
-//                intent.putExtra(LIST_ITEM_POSITION, checkLists!![listPosition].id)
-//                context.startActivity(intent)
+                onListSelectedListener?.onListSelected(checklists!![checklistPosition])
+
+                val intent = Intent(context, SubItemsActivity::class.java)
+                val checklist = checklists?.get(checklistPosition)
+                checklist?.tags = ""
+                checklist?.let { it1 -> intent.putExtra(CHECKLIST, Json.encodeToString(it1)) }
+                context.startActivity(intent)
             }
 
             buttonListActions.setOnClickListener {
-                onListSelectedListener?.onOverflowOptionsSelected(checklists!![listPosition], listPosition)
+                onListSelectedListener?.onOverflowOptionsSelected(checklists!![checklistPosition], checklistPosition)
             }
         }
     }

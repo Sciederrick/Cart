@@ -21,16 +21,17 @@
         </activity>
         <activity
             android:name=".ui.ItemsActivity"
-            android:label="@string/title_activity_items" /> <!-- <activity -->
-        <!-- android:name=".SubItemsActivity" -->
-        <!-- android:exported="false" -->
-        <!-- android:label="@string/title_activity_sub_items" -->
-        <!-- android:parentActivityName=".ItemsActivity" -->
-        <!-- android:theme="@style/Theme.AppBasic.NoActionBar" /> -->
-        <!-- <activity -->
-        <!-- android:name=".SubItemActivity" -->
-        <!-- android:label="@string/title_activity_sub_item" -->
-        <!-- android:parentActivityName=".SubItemsActivity" /> -->
+            android:label="@string/title_activity_items" />
+        <activity
+            android:name=".ui.SubItemsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_sub_items"
+            android:parentActivityName=".ui.ItemsActivity"
+            android:theme="@style/Theme.AppBasic.NoActionBar" />
+        <activity
+            android:name=".ui.SubItemActivity"
+            android:label="@string/title_activity_sub_item"
+            android:parentActivityName=".ui.SubItemsActivity" />
         <activity
             android:name=".ui.SearchResultActivity"
             android:exported="false"

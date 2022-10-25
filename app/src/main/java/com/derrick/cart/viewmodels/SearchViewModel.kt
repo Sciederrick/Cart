@@ -12,11 +12,11 @@ class SearchViewModel(private val cartRepository: CartRepository) : ViewModel() 
     val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
 
     fun update(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.update(checklist)
+        cartRepository.updateChecklist(checklist)
     }
 
     fun delete(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.delete(checklist)
+        cartRepository.deleteChecklist(checklist)
     }
 
     private fun checklistsAsync(ids: List<Int>) = viewModelScope.async {

@@ -32,10 +32,10 @@ class NextThroughNotes{
             onView(withId(R.id.spinnerLists)).check(
                 matches(withSpinnerText(note.course?.title))
             )
-            onView(withId(R.id.newListItemTitle)).check(
+            onView(withId(R.id.editListItemTitle)).check(
                 matches(withText(note.title))
             )
-            onView(withId(R.id.newListItemDescription)).check(
+            onView(withId(R.id.editListItemDescription)).check(
                 matches(withText(note.text))
             )
 
