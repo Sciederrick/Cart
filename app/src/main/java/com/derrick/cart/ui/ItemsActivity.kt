@@ -214,31 +214,6 @@ class ItemsActivity : AppCompatActivity(),
         return true
     }
 
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        viewModel.saveState(outState)
-//    }
-
-
-//  Custom -----------------------------------------------------------------------------------------
-
-/*Navigation*/
-//    private fun handleDisplaySelection(itemId: Int) {
-//        when(itemId){
-//            R.id.nav_lists -> {
-//                displayLists()
-//            }
-//            R.id.nav_prices -> {
-//                displayListItems()
-//            }
-//            R.id.nav_recently_notes -> {
-//                displayRecentlyViewedLists()
-//            }
-//        }
-//    }
-
-
     private fun updateChecklistHistory() {
         lateinit var title: String
         lateinit var titleCondensed: String
@@ -260,15 +235,6 @@ class ItemsActivity : AppCompatActivity(),
     private fun gotoSettings() {
         startActivity(Intent(this, SettingsActivity::class.java))
     }
-
-//    private fun displayRecentlyViewedLists() {
-//        lists.layoutManager = listLayoutManager
-//        lists.adapter = recentlyViewedListsRecyclerAdapter
-//
-//        navView.menu.findItem(R.id.nav_prices).isCheckable = true
-//    }
-/*End of Navigation*/
-
 
 /*Listeners*/
     override fun onListSelected(checklist: Checklist) {

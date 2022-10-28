@@ -1,8 +1,10 @@
 package com.derrick.cart.ui
 
+import android.app.Activity
 import com.derrick.cart.*
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -24,8 +26,9 @@ import kotlinx.serialization.json.Json
 import kotlin.coroutines.CoroutineContext
 
 class SubItemActivity : AppCompatActivity(), CoroutineScope {
-    private var checklistItemPosition = POSITION_NOT_SET
     private var checklistItem: ChecklistItem? = null
+    private var checklists: List<Checklist>? = null
+    private var currentChecklist: Checklist? = null
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
@@ -38,6 +41,14 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var imageViewSmall: ShapeableImageView
     private lateinit var imageViewLarge: ShapeableImageView
 
+    private val adapterLists by lazy {
+        ArrayAdapter<Checklist>(
+            this,
+            android.R.layout.simple_spinner_item,
+            mutableListOf()
+        )
+    }
+
     private var job = Job()
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.Main
@@ -46,18 +57,17 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
         SubItemActivityViewModelFactory((application as CartApplication).repository)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
         toolbar = binding.toolbar
         spinnerLists = binding.contentMain.spinnerLists
         checklistItemTitle = binding.contentMain.editListItemTitle
         checklistItemDescription = binding.contentMain.editListItemDescription
         checklistItemQuantity = binding.contentMain.editListItemQuantity
+        checklistItemPrice = binding.contentMain.editListItemPrice
         btnExpand = binding.contentMain.btnExpand!!
         imageViewSmall = binding.contentMain.itemImage2Small!!
         imageViewLarge = binding.contentMain.itemImage2!!
@@ -67,47 +77,22 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-        val adapterLists = ArrayAdapter<Checklist>(
-            this,
-            android.R.layout.simple_spinner_item,
-            mutableListOf()
-        )
-
-
-        launch {
-            val deferred: Deferred<List<Checklist>?> = async {
-                viewModel.getAllChecklistsAsync().await()
-            }
-
-            deferred.join()
-
-            val checklists = deferred.await()
-
-            checklists?.let {
-                if (checklists.isNotEmpty()) adapterLists.addAll(checklists)
-            }
-        }
-
-
+        populateAdapterList()
         adapterLists.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         spinnerLists.adapter = adapterLists
 
-        checklistItemPosition =
-            savedInstanceState?.getInt(CHECKLIST_ITEM_POSITION, POSITION_NOT_SET)
-                ?: intent.getIntExtra(CHECKLIST_ITEM_POSITION, POSITION_NOT_SET)
+        val currentChecklistJSON = savedInstanceState?.getString(CHECKLIST)
+            ?: intent.getStringExtra(CHECKLIST)
+        currentChecklist = currentChecklistJSON?.let { it -> Json.decodeFromString(it) }
+
+        Log.d(this::class.simpleName, "current checklist: $currentChecklist")
 
         val checklistItemJSON =
-            savedInstanceState?.getSerializable(CHECKLIST_ITEM)
-                ?: intent.getSerializableExtra(CHECKLIST_ITEM)
+            savedInstanceState?.getString(CHECKLIST_ITEM)
+                ?: intent.getStringExtra(CHECKLIST_ITEM)
+        checklistItem = checklistItemJSON?.let { Json.decodeFromString(it) }
 
-        checklistItem = (checklistItemJSON as String?)?.let {
-            Json.decodeFromString<ChecklistItem>(
-                it
-            )
-        }
-
-        if (checklistItemPosition != POSITION_NOT_SET) displayChecklistItem()
+        if (checklistItem != null) displayChecklistItem()
 
         btnExpand.setOnClickListener { toggleItemImage() }
 
@@ -115,7 +100,6 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(CHECKLIST_ITEM_POSITION, checklistItemPosition)
 
         val selectedChecklist = spinnerLists.selectedItem as Checklist
         val newChecklistItem = ChecklistItem(
@@ -128,7 +112,8 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
             hasSublist = false,
             isDone = false
         )
-        outState.putSerializable(CHECKLIST_ITEM, Json.encodeToString(newChecklistItem))
+        outState.putString(CHECKLIST_ITEM, Json.encodeToString(newChecklistItem))
+        outState.putString(CHECKLIST, Json.encodeToString(selectedChecklist))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -138,15 +123,22 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
 
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                finish()
+                val checklist = getChecklist()
+                if (checklist != null) {
+                    val replyIntent = Intent()
+                    // TODO: Add Update && Delete functionality
+                    replyIntent.putExtra(CHECKLIST, Json.encodeToString(checklist))
+                    setResult(Activity.RESULT_OK, replyIntent)
+                    finish()
+                } else {
+                    startActivity(Intent(this, ItemsActivity::class.java))
+                }
             }
             R.id.action_home -> {
                 startActivity(Intent(this, ItemsActivity::class.java))
-                finish()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -159,13 +151,14 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
 
     private fun saveListItem() {
         val selectedChecklist = spinnerLists.selectedItem as Checklist
+
         val newChecklistItem = ChecklistItem(
             id = checklistItem?.id ?: 0,
             checklistId = selectedChecklist.id,
             title = checklistItemTitle.text.toString(),
             description = checklistItemDescription.text.toString(),
-            quantity = (checklistItemQuantity as TextView?)?.text?.toString()?.toFloat(),
-            price = (checklistItemPrice as TextView?)?.text?.toString()?.toDouble(),
+            quantity = (checklistItemQuantity as TextView?)?.text?.toString()?.toFloat() ?: 0F,
+            price = (checklistItemPrice as TextView?)?.text?.toString()?.toDouble() ?: 0.00,
             hasSublist = false,
             isDone = false
         )
@@ -174,11 +167,20 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
     }
 
     private fun displayChecklistItem() {
-        spinnerLists.setSelection(checklistItemPosition)
+        val checklist = getChecklist()
+
         (checklistItemTitle as TextView).text = checklistItem?.title
         (checklistItemDescription as TextView).text = checklistItem?.description
         (checklistItemQuantity as TextView?)?.text = checklistItem?.quantity.toString()
         (checklistItemPrice as TextView?)?.text = checklistItem?.price.toString()
+
+        if (checklists == null) return
+
+        if (checklists!!.isNotEmpty()) {
+            checklist?.let { it ->
+                spinnerLists.setSelection(checklists!!.indexOf(it))
+            }
+        }
     }
 
     private fun toggleItemImage() {
@@ -200,6 +202,33 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
             )
             imageViewLarge.visibility = View.VISIBLE
             imageViewSmall.visibility = View.GONE
+        }
+    }
+
+    private fun populateAdapterList() = launch {
+        val deferred: Deferred<List<Checklist>?> = async {
+            viewModel.getAllChecklistsAsync().await()
+        }
+
+        deferred.join()
+
+        checklists = deferred.await()
+
+        checklists?.let {
+            if (checklists!!.isNotEmpty()) adapterLists.addAll(checklists!!)
+        }
+
+        val parent = checklists?.find { it -> it.id == checklistItem?.checklistId }
+        Log.d(this::class.simpleName, "parent: $parent, current checklist: $currentChecklist")
+        checklists?.let {
+            spinnerLists.setSelection(checklists!!.indexOf(currentChecklist ?: parent))
+        }
+    }
+
+    private fun getChecklist() :Checklist?{
+        return checklists?.let { it ->
+            it.find { it2 ->
+                it2.title == spinnerLists.selectedItem.toString() }
         }
     }
 

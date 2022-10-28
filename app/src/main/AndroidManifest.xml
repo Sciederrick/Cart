@@ -21,6 +21,7 @@
         </activity>
         <activity
             android:name=".ui.ItemsActivity"
+            android:exported="false"
             android:label="@string/title_activity_items" />
         <activity
             android:name=".ui.SubItemsActivity"
@@ -30,8 +31,7 @@
             android:theme="@style/Theme.AppBasic.NoActionBar" />
         <activity
             android:name=".ui.SubItemActivity"
-            android:label="@string/title_activity_sub_item"
-            android:parentActivityName=".ui.SubItemsActivity" />
+            android:label="@string/title_activity_sub_item" />
         <activity
             android:name=".ui.SearchResultActivity"
             android:exported="false"

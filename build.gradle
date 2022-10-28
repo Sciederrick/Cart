@@ -30,15 +30,15 @@ task clean(type: Delete) {
 }
 
 ext {
-    activityVersion = '1.6.0'
+    activityVersion = '1.6.1'
+    fragmentVersion = '1.5.4'
+    materialVersion = '1.7.0'
     appCompatVersion = '1.5.1'
     roomVersion = "2.4.3"
     lifecycleVersion = '2.5.1'
     coroutines = '1.6.4'
     constraintLayoutVersion = '2.1.4'
-    materialVersion = '1.6.1'
     preferenceVersion = '1.2.0'
-    fragmentVersion = '1.5.3'
     // testing
     junitVersion = '4.13.2'
     espressoVersion = '3.4.0'
