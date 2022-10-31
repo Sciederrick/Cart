@@ -6,7 +6,7 @@ import com.derrick.cart.models.ChecklistItem
 
 @Dao
 interface ChecklistItemDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(checklistItem: ChecklistItem)
 
     @Query("SELECT * FROM checklist_item WHERE checklist_id LIKE :checklistId")

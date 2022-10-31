@@ -85,8 +85,6 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
             ?: intent.getStringExtra(CHECKLIST)
         currentChecklist = currentChecklistJSON?.let { it -> Json.decodeFromString(it) }
 
-        Log.d(this::class.simpleName, "current checklist: $currentChecklistJSON")
-
         val checklistItemJSON =
             savedInstanceState?.getString(CHECKLIST_ITEM)
                 ?: intent.getStringExtra(CHECKLIST_ITEM)
