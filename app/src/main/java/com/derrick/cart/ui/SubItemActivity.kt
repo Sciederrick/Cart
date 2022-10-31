@@ -85,7 +85,7 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
             ?: intent.getStringExtra(CHECKLIST)
         currentChecklist = currentChecklistJSON?.let { it -> Json.decodeFromString(it) }
 
-        Log.d(this::class.simpleName, "current checklist: $currentChecklist")
+        Log.d(this::class.simpleName, "current checklist: $currentChecklistJSON")
 
         val checklistItemJSON =
             savedInstanceState?.getString(CHECKLIST_ITEM)
@@ -155,10 +155,10 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
         val newChecklistItem = ChecklistItem(
             id = checklistItem?.id ?: 0,
             checklistId = selectedChecklist.id,
-            title = checklistItemTitle.text.toString(),
-            description = checklistItemDescription.text.toString(),
-            quantity = (checklistItemQuantity as TextView?)?.text?.toString()?.toFloat() ?: 0F,
-            price = (checklistItemPrice as TextView?)?.text?.toString()?.toDouble() ?: 0.00,
+            title = checklistItemTitle.text.toString().trim(),
+            description = checklistItemDescription.text.toString().trim(),
+            quantity = (checklistItemQuantity as TextView?)?.text?.toString()?.trim()?.toFloat() ?: 0F,
+            price = (checklistItemPrice as TextView?)?.text?.toString()?.trim()?.toDouble() ?: 0.00,
             hasSublist = false,
             isDone = false
         )
@@ -219,7 +219,6 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
         }
 
         val parent = checklists?.find { it -> it.id == checklistItem?.checklistId }
-        Log.d(this::class.simpleName, "parent: $parent, current checklist: $currentChecklist")
         checklists?.let {
             spinnerLists.setSelection(checklists!!.indexOf(currentChecklist ?: parent))
         }

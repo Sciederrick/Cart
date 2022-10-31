@@ -65,7 +65,6 @@ class ChecklistAdapter(private val context: Context)
 
                 val intent = Intent(context, SubItemsActivity::class.java)
                 val checklist = checklists?.get(checklistPosition)
-                checklist?.tags = ""
                 checklist?.let { it1 -> intent.putExtra(CHECKLIST, Json.encodeToString(it1)) }
                 context.startActivity(intent)
             }

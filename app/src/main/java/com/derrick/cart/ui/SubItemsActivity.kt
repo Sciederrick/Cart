@@ -69,7 +69,6 @@ class SubItemsActivity : AppCompatActivity() {
         displayChecklistItems()
 
         fab.setOnClickListener {
-            Log.d(this::class.simpleName, "startForResult input: $checklist")
             startForResult.launch(checklist)
         }
     }
