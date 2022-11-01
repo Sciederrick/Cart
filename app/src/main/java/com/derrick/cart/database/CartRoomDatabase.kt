@@ -8,7 +8,7 @@ import com.derrick.cart.R
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.models.ChecklistItem
 
-@Database(entities = [Checklist::class, ChecklistItem::class], exportSchema = true, version = 1)
+@Database(entities = [Checklist::class, ChecklistItem::class], exportSchema = false, version = 1)
 abstract class CartRoomDatabase : RoomDatabase() {
     abstract fun checklistDao(): ChecklistDao
     abstract fun checklistItemDao(): ChecklistItemDao
@@ -25,6 +25,7 @@ abstract class CartRoomDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): CartRoomDatabase {
             return Room.databaseBuilder(context, CartRoomDatabase::class.java, R.string.database_name.toString())
+                .fallbackToDestructiveMigration()
                 .build()
         }
 
