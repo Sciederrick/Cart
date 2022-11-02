@@ -115,7 +115,7 @@ class ItemsActivity : AppCompatActivity(),
         checklists.adapter = checklistAdapter
 
         fab.setOnClickListener {
-            showModalBottomSheet()
+            addNewList()
         }
 
 //        if (viewModel.isNewlyCreated && savedInstanceState != null) {
@@ -290,7 +290,7 @@ class ItemsActivity : AppCompatActivity(),
 /*End of Listeners*/
 
 /*Bottom Sheets*/
-    private fun showModalBottomSheet() {
+    private fun addNewList() {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_new_list, null)
 
         dialogNewList.setCancelable(false)

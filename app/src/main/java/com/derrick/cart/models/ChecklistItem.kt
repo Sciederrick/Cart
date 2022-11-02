@@ -17,10 +17,10 @@ import kotlinx.serialization.Serializable
 data class ChecklistItem (
     @PrimaryKey(autoGenerate = true) var id: Long,
     @ColumnInfo(name = "checklist_id", index = true) var checklistId: Long,
-    var title: String?,
-    var description: String?,
-    var quantity: Float?,
-    var price: Double?,
-    @ColumnInfo(name = "is_done") var isDone: Boolean,
-    @ColumnInfo(name = "has_sublist") var hasSublist: Boolean
+    var title: String,
+    var description: String = "",
+    var quantity: Float = 0F,
+    var price: Double = 0.0,
+    @ColumnInfo(name = "is_done") var isDone: Boolean = false,
+    @ColumnInfo(name = "has_sublist") var hasSublist: Boolean = false
 )
