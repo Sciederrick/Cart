@@ -65,7 +65,6 @@
     <string name="title_activity_sub_item">SubItemActivity</string>
 
     <!-- Application Resources -->
-    <string name="database_name" translatable="false">cart-db</string>
     <string name="preference_file_key" translatable="false">com.derrick.cart.my-pref</string>
     <string name="viewed_checklist_history" translatable="false">com.derrick.cart.viewed_list_history</string>
 

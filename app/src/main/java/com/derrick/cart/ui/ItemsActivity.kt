@@ -53,10 +53,6 @@ class ItemsActivity : AppCompatActivity(),
     private val dialogManageList by lazy { BottomSheetDialog(this) }
 
     //ViewModels
-//    private val viewModel by lazy {
-//        ViewModelProvider(this)[ItemsActivityViewModel::class.java]
-//    }
-
     private val viewModel: ItemsActivityViewModel by viewModels {
         ItemsActivityViewModelFactory((application as CartApplication).repository)
     }

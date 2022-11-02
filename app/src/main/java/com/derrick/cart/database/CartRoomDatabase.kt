@@ -24,7 +24,7 @@ abstract class CartRoomDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context): CartRoomDatabase {
-            return Room.databaseBuilder(context, CartRoomDatabase::class.java, R.string.database_name.toString())
+            return Room.databaseBuilder(context, CartRoomDatabase::class.java, "cart_database")
                 .fallbackToDestructiveMigration()
                 .build()
         }
