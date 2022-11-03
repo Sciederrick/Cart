@@ -21,15 +21,17 @@ class SubItemActivityViewModel(private val cartRepository: CartRepository) : Vie
     }
 
     fun getNewChecklistItemEntry(
+        id: Long? = 0,
         checklistId: Long,
         title: String,
         description: String,
-        quantity: Float,
-        price: Double,
+        quantity: Float? = 0F,
+        price: Double? = 0.0,
         hasSublist: Boolean,
         isDone: Boolean
     ): ChecklistItem {
         return ChecklistItem(
+            id = id ?: 0,
             checklistId = checklistId,
             title = title,
             description = description,
@@ -50,6 +52,7 @@ class SubItemActivityViewModel(private val cartRepository: CartRepository) : Vie
 
     fun addChecklistItem(payload: HashMap<String, Any>) {
         val newChecklistItem = getNewChecklistItemEntry(
+            id = payload["id"] as Long,
             checklistId = payload["checklistId"] as Long,
             title = payload["title"] as String,
             description = payload["description"] as String,

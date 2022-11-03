@@ -100,8 +100,8 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
         super.onSaveInstanceState(outState)
 
         val selectedChecklist = spinnerLists.selectedItem as Checklist
-        val newChecklistItem = ChecklistItem(
-            id = checklistItem?.id ?: 0,
+        val newChecklistItem = viewModel.getNewChecklistItemEntry(
+            id = checklistItem?.id,
             checklistId = selectedChecklist.id,
             title = checklistItemTitle.text.toString(),
             description = checklistItemDescription.text.toString(),
@@ -133,10 +133,12 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
                     finish()
                 } else {
                     startActivity(Intent(this, ItemsActivity::class.java))
+                    finish()
                 }
             }
             R.id.action_home -> {
                 startActivity(Intent(this, ItemsActivity::class.java))
+                finish()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -151,6 +153,7 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
         val selectedChecklist = spinnerLists.selectedItem as Checklist
 
         val payload = hashMapOf<String, Any>()
+        payload["id"] = (checklistItem?.id ?: 0) as Long
         payload["checklistId"] = selectedChecklist.id
         payload["title"] = checklistItemTitle.text.toString().trim()
         payload["description"] = checklistItemDescription.text.toString().trim()
