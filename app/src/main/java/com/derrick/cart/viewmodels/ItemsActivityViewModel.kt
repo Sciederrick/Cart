@@ -11,8 +11,24 @@ import kotlinx.coroutines.*
 class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewModel() {
     val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
 
-    fun insert(checklist: Checklist) = viewModelScope.launch {
+    private fun insertChecklist(checklist: Checklist) = viewModelScope.launch {
         cartRepository.insertChecklist(checklist)
+    }
+
+    private fun getNewChecklistEntry(title: String, tags: String, itemsChecked: Long, size: Long) :Checklist{
+        return Checklist(title = title, tags = tags, itemsChecked = itemsChecked, size = size)
+    }
+
+    fun addNewChecklist(title: String, tags: String = "", itemsChecked: Long = 0, size: Long = 0) {
+        val newChecklist = getNewChecklistEntry(title, tags, itemsChecked, size)
+        insertChecklist(newChecklist)
+    }
+
+    fun isEntryValid(checklistTitle: String): Boolean {
+        if (checklistTitle.isBlank()) {
+            return false
+        }
+        return true
     }
 
     fun update(checklist: Checklist) = viewModelScope.launch {

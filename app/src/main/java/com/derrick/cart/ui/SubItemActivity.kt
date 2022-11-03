@@ -150,18 +150,21 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
     private fun saveListItem() {
         val selectedChecklist = spinnerLists.selectedItem as Checklist
 
-        val newChecklistItem = ChecklistItem(
-            id = checklistItem?.id ?: 0,
-            checklistId = selectedChecklist.id,
-            title = checklistItemTitle.text.toString().trim(),
-            description = checklistItemDescription.text.toString().trim(),
-            quantity = (checklistItemQuantity as TextView?)?.text?.toString()?.trim()?.toFloat() ?: 0F,
-            price = (checklistItemPrice as TextView?)?.text?.toString()?.trim()?.toDouble() ?: 0.00,
-            hasSublist = false,
-            isDone = false
-        )
+        val payload = hashMapOf<String, Any>()
+        payload["checklistId"] = selectedChecklist.id
+        payload["title"] = checklistItemTitle.text.toString().trim()
+        payload["description"] = checklistItemDescription.text.toString().trim()
+        payload["quantity"] =
+            (checklistItemQuantity as TextView?)?.text?.toString()?.trim()?.toFloat() ?: 0F
+        payload["price"] =
+            (checklistItemPrice as TextView?)?.text?.toString()?.trim()?.toDouble() ?: 0.00
+        payload["hasSublist"] = false
+        payload["isDone"] = false
 
-        viewModel.insertChecklistItem(newChecklistItem)
+        if (viewModel.isEntryValid(payload)) {
+            viewModel.addChecklistItem(payload)
+        }
+
     }
 
     private fun displayChecklistItem() {

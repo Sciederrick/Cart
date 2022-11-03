@@ -289,7 +289,8 @@ class ItemsActivity : AppCompatActivity(),
     }
 /*End of Listeners*/
 
-/*Bottom Sheets*/
+    /*New Checklist*/
+
     private fun addNewList() {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_new_list, null)
 
@@ -303,13 +304,16 @@ class ItemsActivity : AppCompatActivity(),
 
         val btnCreateNewList = view.findViewById<Button>(R.id.btnRenameListUpdate)
         btnCreateNewList.setOnClickListener {
-            val txtInput = view.findViewById<EditText>(R.id.renameList)
-            viewModel.insert(Checklist(0, txtInput.text.toString().trim(), null, 0, 0))
+            val txtInput = view.findViewById<EditText>(R.id.renameList).text.toString()
+            if (viewModel.isEntryValid(txtInput)) {
+                viewModel.addNewChecklist(title = txtInput)
+            }
+
             dialogNewList.dismiss()
         }
     }
+    /*End of New Checklist*/
 
-/*Bottom Sheets*/
 
 
 /*Display*/
