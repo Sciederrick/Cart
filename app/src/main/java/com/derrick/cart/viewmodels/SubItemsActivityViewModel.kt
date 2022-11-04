@@ -3,12 +3,22 @@ package com.derrick.cart.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.derrick.cart.models.ChecklistItem
 import com.derrick.cart.repository.CartRepository
+import kotlinx.coroutines.launch
 
 class SubItemsActivityViewModel(private val cartRepository: CartRepository): ViewModel() {
     fun getChecklistItemsByChecklistId(checklistId: Long) :LiveData<List<ChecklistItem>>{
         return cartRepository.getChecklistItemsByChecklistId(checklistId)
+    }
+
+    fun deleteChecklistItem(checklistItem: ChecklistItem) = viewModelScope.launch {
+        cartRepository.deleteChecklistItem(checklistItem)
+    }
+
+    fun insertChecklistItem(checklistItem: ChecklistItem) = viewModelScope.launch {
+        cartRepository.insertChecklistItem(checklistItem)
     }
 }
 
