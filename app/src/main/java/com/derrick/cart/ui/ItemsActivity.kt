@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
@@ -271,8 +272,7 @@ class ItemsActivity : AppCompatActivity(),
         val deleteBtn = view.findViewById<Button>(R.id.btnDeleteList)
         deleteBtn.setOnClickListener {
             dialogManageList.dismiss()
-            viewModel.deleteChecklist(checklist)
-            Toast.makeText(this, getString(R.string.toast_delete_success, checklist.title), Toast.LENGTH_SHORT).show()
+            deleteConfirmationDialog(checklist)
         }
     }
 
@@ -311,14 +311,25 @@ class ItemsActivity : AppCompatActivity(),
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
             val deletedChecklist = _checklists?.get(position)
-            deletedChecklist?.let { it -> viewModel.deleteChecklist(it) }
-
-            Snackbar.make(recyclerView, "Deleted", Snackbar.LENGTH_LONG)
-                .setAction("UNDO") {
-                    deletedChecklist?.let { _it -> viewModel.insertChecklist(_it) }
-                }
-                .show()
+            deletedChecklist?.let { it -> deleteConfirmationDialog(it) }
         }
     })
+
+    private fun deleteConfirmationDialog(checklist: Checklist) {
+        AlertDialog.Builder(this)
+            .setTitle(getString(R.string.delete_dialog_alert_title))
+            .setMessage(getString(R.string.delete_question))
+            .setCancelable(false)
+            .setNegativeButton(getString(R.string.no)) { _, _ -> checklistAdapter.notifyDataSetChanged()}
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                deleteChecklist(checklist)
+            }
+            .show()
+    }
+
+    private fun deleteChecklist(checklist: Checklist) {
+        viewModel.deleteChecklist(checklist)
+        Toast.makeText(this, getString(R.string.toast_delete_success, checklist.title), Toast.LENGTH_SHORT).show()
+    }
 
 }

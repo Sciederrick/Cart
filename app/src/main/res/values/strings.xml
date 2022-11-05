@@ -95,5 +95,8 @@
         <item>2</item>
     </string-array>
 
-    <!-- App Search -->
+    <string name="no">no</string>
+    <string name="yes">yes</string>
+    <string name="delete_question">Are you sure you want to delete this list?</string>
+    <string name="delete_dialog_alert_title">Delete?</string>
 </resources>

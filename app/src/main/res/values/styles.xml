@@ -92,6 +92,7 @@
     </style>
 
     <!-- theme independent Styles -->
+
     <style name="FAB" parent="@style/Widget.Design.FloatingActionButton">
         <item name="android:layout_margin">@dimen/fab_margin</item>
     </style>
@@ -99,6 +100,7 @@
     <style name="AddFAB" parent="FAB">
         <item name="android:layout_margin">@dimen/fab_margin</item>
         <item name="srcCompat">@drawable/ic_add_white_24dp</item>
+
     </style>
 
     <style name="AudioFAB" parent="FAB">
@@ -114,4 +116,5 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/rounded_corner_radius</item>
     </style>
+
 </resources>

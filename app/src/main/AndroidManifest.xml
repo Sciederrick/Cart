@@ -47,8 +47,7 @@
         </activity>
         <activity
             android:name=".ui.SettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppBasic" />
+            android:exported="false" />
     </application>
 
 </manifest>
