@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewModel() {
     val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
 
-    private fun insertChecklist(checklist: Checklist) = viewModelScope.launch {
+    fun insertChecklist(checklist: Checklist) = viewModelScope.launch {
         cartRepository.insertChecklist(checklist)
     }
 
@@ -31,11 +31,11 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
         return true
     }
 
-    fun update(checklist: Checklist) = viewModelScope.launch {
+    fun updateChecklist(checklist: Checklist) = viewModelScope.launch {
         cartRepository.updateChecklist(checklist)
     }
 
-    fun delete(checklist: Checklist) = viewModelScope.launch {
+    fun deleteChecklist(checklist: Checklist) = viewModelScope.launch {
         cartRepository.deleteChecklist(checklist)
     }
 

@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CartApplication
@@ -27,6 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -34,6 +36,8 @@ import kotlin.coroutines.CoroutineContext
 class ItemsActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     ChecklistAdapter.OnListSelectedListener, CoroutineScope {
+
+    private var _checklists: List<Checklist>? = null
 
     private var job = Job()
     override val coroutineContext: CoroutineContext
@@ -45,7 +49,7 @@ class ItemsActivity : AppCompatActivity(),
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var navView: NavigationView
-    private lateinit var checklists: RecyclerView
+    private lateinit var recyclerView: RecyclerView
     /* end of bindings */
 
     //BottomSheetDialogs
@@ -59,21 +63,14 @@ class ItemsActivity : AppCompatActivity(),
 
     //LayoutManagers
     private val checklistLayoutManager by lazy { LinearLayoutManager(this) }
-//    private val listItemLayoutManager by lazy { LinearLayoutManager(this) }
 
     //RecyclerAdapters
     private val checklistAdapter by lazy {
-//        val adapter = ListRecyclerAdapter(this, DataManager.listsArray, dialogManageList)
         val adapter = ChecklistAdapter(this)
         adapter.setOnSelectedListener(this)
         adapter
     }
-//    private val listItemRecyclerAdapter by lazy { ListItemRecyclerAdapter(this, DataManager.listItems) }
-//    private val recentlyViewedListsRecyclerAdapter by lazy {
-//        val adapter = ListRecyclerAdapter(this, viewModel.recentlyViewedLists)
-//        adapter.setOnSelectedListener(this)
-//        adapter
-//    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +80,7 @@ class ItemsActivity : AppCompatActivity(),
         drawerLayout = binding.drawerLayout
         toolbar = binding.appBarItems.toolbar
         navView = binding.navView
-        checklists = binding.appBarItems.contentItems.checklists /*RecyclerView*/
+        recyclerView = binding.appBarItems.contentItems.checklists /*RecyclerView*/
 
         setContentView(binding.root)
 
@@ -108,26 +105,18 @@ class ItemsActivity : AppCompatActivity(),
         viewModel.allChecklists.observe(this) { checklists ->
             checklists?.let {
                 checklistAdapter.setChecklists(it)
+                _checklists = it
             }
         }
 
-        checklists.layoutManager = checklistLayoutManager
-        checklists.adapter = checklistAdapter
+        recyclerView.layoutManager = checklistLayoutManager
+        recyclerView.adapter = checklistAdapter
 
         fab.setOnClickListener {
             addNewList()
         }
 
-//        if (viewModel.isNewlyCreated && savedInstanceState != null) {
-//            viewModel.restoreState(savedInstanceState)
-//        }
-
-//        viewModel.isNewlyCreated = false
-//        handleDisplaySelection(viewModel.navDrawerDisplaySelection)
-
-        // when there's a configuration change repopulate from viewModel
-//        updateNavViewHistory()
-
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
 
@@ -232,7 +221,6 @@ class ItemsActivity : AppCompatActivity(),
         startActivity(Intent(this, SettingsActivity::class.java))
     }
 
-/*Listeners*/
     override fun onListSelected(checklist: Checklist) {
         viewModel.addToRecentlyViewedChecklists(checklist)
         updateChecklistHistory()
@@ -273,7 +261,7 @@ class ItemsActivity : AppCompatActivity(),
             renameViewUpdateBtn.setOnClickListener {
                 dialogManageList.cancel()
                 checklist.title = renameTitle.text.toString()
-                viewModel.update(checklist)
+                viewModel.updateChecklist(checklist)
 
                 Toast.makeText(this, R.string.toast_rename_success, Toast.LENGTH_LONG).show()
             }
@@ -283,13 +271,10 @@ class ItemsActivity : AppCompatActivity(),
         val deleteBtn = view.findViewById<Button>(R.id.btnDeleteList)
         deleteBtn.setOnClickListener {
             dialogManageList.dismiss()
-            viewModel.delete(checklist)
+            viewModel.deleteChecklist(checklist)
             Toast.makeText(this, getString(R.string.toast_delete_success, checklist.title), Toast.LENGTH_SHORT).show()
         }
     }
-/*End of Listeners*/
-
-    /*New Checklist*/
 
     private fun addNewList() {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_new_list, null)
@@ -312,26 +297,28 @@ class ItemsActivity : AppCompatActivity(),
             dialogNewList.dismiss()
         }
     }
-    /*End of New Checklist*/
 
+    private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+        0, ItemTouchHelper.RIGHT
+    ) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val position = viewHolder.adapterPosition
+            val deletedChecklist = _checklists?.get(position)
+            deletedChecklist?.let { it -> viewModel.deleteChecklist(it) }
 
-
-/*Display*/
-//    private fun displayLists() {
-//        lists.layoutManager = listLayoutManager
-//        lists.adapter = listRecyclerAdapter
-//
-//        navView.menu.findItem(R.id.nav_lists).isCheckable = true
-//    }
-
-//    private fun displayListItems() {
-//        lists.layoutManager = listItemLayoutManager
-//        lists.adapter = listItemRecyclerAdapter
-//
-//        navView.menu.findItem(R.id.nav_prices).isCheckable = true
-//    }
-/*Display*/
-
-
+            Snackbar.make(recyclerView, "Deleted", Snackbar.LENGTH_LONG)
+                .setAction("UNDO") {
+                    deletedChecklist?.let { _it -> viewModel.insertChecklist(_it) }
+                }
+                .show()
+        }
+    })
 
 }

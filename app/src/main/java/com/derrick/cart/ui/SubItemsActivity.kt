@@ -117,8 +117,15 @@ class SubItemsActivity : AppCompatActivity() {
     }
 
     private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT
+        0, ItemTouchHelper.RIGHT
     ) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
             val deletedChecklistItem = _checklistItems?.get(position)
@@ -126,9 +133,7 @@ class SubItemsActivity : AppCompatActivity() {
 
             Snackbar.make(recyclerView, "Deleted", Snackbar.LENGTH_LONG)
                 .setAction("UNDO") {
-                    //undoDelete(position, deletedChecklistItem)
-                    //updateChecklistItem(deletedChecklistItem, true)
-                    deletedChecklistItem?.let { it -> viewModel.insertChecklistItem(it) }
+                    deletedChecklistItem?.let { _it -> viewModel.insertChecklistItem(_it) }
                 }
                 .show()
         }
