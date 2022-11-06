@@ -27,3 +27,18 @@ data class ChecklistItem(
     @ColumnInfo(name = "is_done") var isDone: Boolean = false,
     @ColumnInfo(name = "has_sublist") var hasSublist: Boolean = false
 )
+
+fun ChecklistItem.formattedQuantity() :String {
+    val quantity = quantity.toString()
+    val (significand, mantissa) = quantity.split(".")
+    val mantissaInt = mantissa.toInt()
+    if (mantissaInt > 0) {
+        val result = significand.plus(".").plus(mantissa.replace("0", ""))
+        return "%.1f".format(result.toFloat()).plus("x")
+    }
+    return significand.plus("x")
+}
+
+fun ChecklistItem.formattedPrice() :String {
+    return "%.2f".format(price)
+}

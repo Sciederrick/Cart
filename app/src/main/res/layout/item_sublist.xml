@@ -12,8 +12,7 @@
         app:cardCornerRadius="4dp"
         app:cardElevation="1dp"
         app:cardUseCompatPadding="true"
-        app:contentPadding="16dp"
-        app:contentPaddingBottom="0dp">
+        app:contentPadding="20dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,16 +23,15 @@
                 style="?itemListImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="28dp"
+                android:layout_marginStart="32dp"
                 android:contentDescription="@string/button_expand_desc"
                 android:minHeight="@dimen/min_clickable_height"
-                app:layout_constraintEnd_toStartOf="@+id/listItemPrice"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintHorizontal_weight="0.5"
-                app:layout_constraintStart_toEndOf="@+id/listItemTitle"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_expand_down_24dp" />
-
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_outline_expand_circle_down_24dp" />
 
             <TextView
                 android:id="@+id/listItemQuantity"
@@ -42,47 +40,39 @@
                 android:layout_height="wrap_content"
                 android:text="1x"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintEnd_toStartOf="@+id/listItemTitle"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listItemPrice" />
 
             <TextView
                 android:id="@+id/listItemTitle"
                 style="?textTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="title"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
-                app:layout_constraintEnd_toStartOf="@+id/imageButtonExpand"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_weight="3"
-                app:layout_constraintStart_toEndOf="@+id/listItemQuantity"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/listItemPrice"
                 style="?textNormal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="27dp"
                 android:text="KES 0.00"
-                app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/imageButtonExpand"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/itemImage"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/rounded_rectangle_2"
                 android:contentDescription="@string/list_item_image_desc"
@@ -98,6 +88,7 @@
                 style="?textNormalBlack"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:paddingLeft="20dp"
                 android:text="@string/list_item_desc_hint"
                 app:layout_constraintEnd_toEndOf="@+id/listItemPrice"
@@ -109,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="48dp" />
+                app:layout_constraintGuide_begin="50dp" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/listItemsExpandGroup"
@@ -117,6 +108,37 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:constraint_referenced_ids="itemImage,listItemDesc" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.55" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="listItemPrice,listItemQuantity" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginEnd="4dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintBottom_toTopOf="@+id/listItemQuantity"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/listItemPrice"
+                app:layout_constraintTop_toBottomOf="@+id/listItemPrice" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
     </androidx.cardview.widget.CardView>
 </FrameLayout>

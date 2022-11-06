@@ -14,6 +14,8 @@ import com.derrick.cart.CHECKLIST_ITEM
 import com.derrick.cart.CHECKLIST_ITEM_POSITION
 import com.derrick.cart.R
 import com.derrick.cart.models.ChecklistItem
+import com.derrick.cart.models.formattedPrice
+import com.derrick.cart.models.formattedQuantity
 import com.derrick.cart.ui.SubItemActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -41,8 +43,8 @@ class ChecklistItemAdapter(private val context: Context) :
         val checklistItem = checklistItems?.get(position)
         holder.checklistItemTitle.text = checklistItem?.title
         holder.checklistItemDesc.text = checklistItem?.description
-        holder.checklistItemQuantity.text = checklistItem?.quantity.toString()
-        holder.checklistItemPrice.text = checklistItem?.price.toString()
+        holder.checklistItemQuantity.text = checklistItem?.formattedQuantity()
+        holder.checklistItemPrice.text = checklistItem?.formattedPrice()
         holder.checklistItemPosition = position
     }
 
@@ -64,10 +66,10 @@ class ChecklistItemAdapter(private val context: Context) :
             val groupExpand = itemView.findViewById<Group>(R.id.listItemsExpandGroup)
             expandButton.setOnClickListener {
                 groupExpand.visibility = if (groupExpand.visibility != View.GONE) {
-                    expandButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_expand_down_24dp))
+                    expandButton.rotation = 0f
                     View.GONE
                 } else {
-                    expandButton.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_expand_up_24dp))
+                    expandButton.rotation = 180f
                     View.VISIBLE
                 }
             }
