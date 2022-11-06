@@ -24,6 +24,7 @@ data class ChecklistItem(
     var description: String? = "",
     var quantity: Float? = 0F,
     var price: Double? = 0.0,
+    @ColumnInfo(name="image_URI") var imageURI: String? = "",
     @ColumnInfo(name = "is_done") var isDone: Boolean = false,
     @ColumnInfo(name = "has_sublist") var hasSublist: Boolean = false
 )

@@ -8,7 +8,7 @@ import com.derrick.cart.R
 import com.derrick.cart.models.Checklist
 import com.derrick.cart.models.ChecklistItem
 
-@Database(entities = [Checklist::class, ChecklistItem::class], exportSchema = false, version = 1)
+@Database(entities = [Checklist::class, ChecklistItem::class], exportSchema = false, version = 3)
 abstract class CartRoomDatabase : RoomDatabase() {
     abstract fun checklistDao(): ChecklistDao
     abstract fun checklistItemDao(): ChecklistItemDao
