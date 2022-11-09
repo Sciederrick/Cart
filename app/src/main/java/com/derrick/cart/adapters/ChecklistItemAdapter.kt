@@ -2,11 +2,16 @@ package com.derrick.cart.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
+import android.view.ViewParent
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintSet.GONE
 import androidx.constraintlayout.widget.Group
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -53,6 +58,7 @@ class ChecklistItemAdapter(private val context: Context) :
         val checklistItemDesc: TextView = itemView.findViewById(R.id.listItemDesc)
         val checklistItemQuantity: TextView = itemView.findViewById(R.id.listItemQuantity)
         val checklistItemPrice: TextView = itemView.findViewById(R.id.listItemPrice)
+        val checklistItemImage: ImageView = itemView.findViewById(R.id.itemImage)
         var checklistItemPosition = 0
 
         init {
