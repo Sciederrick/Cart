@@ -1,30 +1,23 @@
-package com.derrick.cart.adapters
+package com.derrick.cart.ui.adapters
 
 import android.content.Context
 import android.content.Intent
-import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintSet.GONE
 import androidx.constraintlayout.widget.Group
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CHECKLIST_ITEM
-import com.derrick.cart.CHECKLIST_ITEM_POSITION
 import com.derrick.cart.R
-import com.derrick.cart.models.ChecklistItem
-import com.derrick.cart.models.formattedPrice
-import com.derrick.cart.models.formattedQuantity
+import com.derrick.cart.data.local.entities.ChecklistItem
+import com.derrick.cart.data.local.entities.formattedPrice
+import com.derrick.cart.data.local.entities.formattedQuantity
 import com.derrick.cart.ui.SubItemActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.w3c.dom.Text
 
 class ChecklistItemAdapter(private val context: Context) :
     RecyclerView.Adapter<ChecklistItemAdapter.ViewHolder>() {

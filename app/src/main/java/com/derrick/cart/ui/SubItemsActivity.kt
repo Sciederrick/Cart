@@ -12,19 +12,18 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.*
-import com.derrick.cart.adapters.ChecklistItemAdapter
-import com.derrick.cart.contracts.SubItemActivityContract
+import com.derrick.cart.ui.adapters.ChecklistItemAdapter
+import com.derrick.cart.ui.contracts.SubItemActivityContract
 import com.derrick.cart.databinding.ActivitySubItemsBinding
-import com.derrick.cart.models.Checklist
-import com.derrick.cart.models.ChecklistItem
-import com.derrick.cart.viewmodels.SubItemsActivityViewModel
-import com.derrick.cart.viewmodels.SubItemsActivityViewModelFactory
+import com.derrick.cart.data.local.entities.Checklist
+import com.derrick.cart.data.local.entities.ChecklistItem
+import com.derrick.cart.data.viewmodels.SubItemsActivityViewModel
+import com.derrick.cart.data.viewmodels.SubItemsActivityViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.*
 
 class SubItemsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySubItemsBinding

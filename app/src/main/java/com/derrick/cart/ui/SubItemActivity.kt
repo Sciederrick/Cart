@@ -4,7 +4,6 @@ import android.app.Activity
 import com.derrick.cart.*
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -15,10 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.imageview.ShapeableImageView
 import com.derrick.cart.databinding.ActivityMainBinding
-import com.derrick.cart.models.Checklist
-import com.derrick.cart.models.ChecklistItem
-import com.derrick.cart.viewmodels.SubItemActivityViewModel
-import com.derrick.cart.viewmodels.SubItemActivityViewModelFactory
+import com.derrick.cart.data.local.entities.Checklist
+import com.derrick.cart.data.local.entities.ChecklistItem
+import com.derrick.cart.data.viewmodels.SubItemActivityViewModel
+import com.derrick.cart.data.viewmodels.SubItemActivityViewModelFactory
 import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -228,7 +227,7 @@ class SubItemActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private fun getChecklist() :Checklist?{
+    private fun getChecklist() : Checklist?{
         return checklists?.let { it ->
             it.find { it2 ->
                 it2.title == spinnerLists.selectedItem.toString() }

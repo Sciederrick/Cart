@@ -20,16 +20,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CartApplication
 import com.derrick.cart.R
-import com.derrick.cart.adapters.ChecklistAdapter
+import com.derrick.cart.ui.adapters.ChecklistAdapter
 import com.derrick.cart.databinding.ActivityItemsBinding
-import com.derrick.cart.models.Checklist
-import com.derrick.cart.viewmodels.ItemsActivityViewModel
-import com.derrick.cart.viewmodels.ItemsActivityViewModelFactory
+import com.derrick.cart.data.local.entities.Checklist
+import com.derrick.cart.data.viewmodels.ItemsActivityViewModel
+import com.derrick.cart.data.viewmodels.ItemsActivityViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 

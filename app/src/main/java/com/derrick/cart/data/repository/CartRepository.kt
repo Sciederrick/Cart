@@ -1,15 +1,16 @@
-package com.derrick.cart.repository
+package com.derrick.cart.data.repository
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
-import com.derrick.cart.database.ChecklistDao
-import com.derrick.cart.database.ChecklistItemDao
-import com.derrick.cart.models.Checklist
-import com.derrick.cart.models.ChecklistItem
+import com.derrick.cart.data.local.daos.ChecklistDao
+import com.derrick.cart.data.local.daos.ChecklistItemDao
+import com.derrick.cart.data.local.entities.Checklist
+import com.derrick.cart.data.local.entities.ChecklistItem
 
 
 class CartRepository(private val checklistDao: ChecklistDao,
-                     private val checklistItemDao: ChecklistItemDao) {
+                     private val checklistItemDao: ChecklistItemDao
+) {
     val allChecklists: LiveData<List<Checklist>> = checklistDao.getAll
 
     suspend fun checklists(ids: List<Int>) = checklistDao.getByIds(ids)

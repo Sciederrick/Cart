@@ -1,7 +1,6 @@
 package com.derrick.cart.ui
 
 import android.app.SearchManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -18,11 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CartApplication
 import com.derrick.cart.R
-import com.derrick.cart.adapters.ChecklistAdapter
+import com.derrick.cart.ui.adapters.ChecklistAdapter
 import com.derrick.cart.databinding.ActivityItemsBinding
-import com.derrick.cart.models.Checklist
-import com.derrick.cart.viewmodels.SearchViewModel
-import com.derrick.cart.viewmodels.SearchViewModelFactory
+import com.derrick.cart.data.local.entities.Checklist
+import com.derrick.cart.data.viewmodels.SearchViewModel
+import com.derrick.cart.data.viewmodels.SearchViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton

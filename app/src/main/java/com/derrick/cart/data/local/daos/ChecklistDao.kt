@@ -1,8 +1,8 @@
-package com.derrick.cart.database
+package com.derrick.cart.data.local.daos
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.derrick.cart.models.Checklist
+import com.derrick.cart.data.local.entities.Checklist
 
 @Dao
 interface ChecklistDao {

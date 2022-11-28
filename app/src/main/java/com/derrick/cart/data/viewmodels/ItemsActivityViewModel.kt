@@ -1,10 +1,10 @@
-package com.derrick.cart.viewmodels
+package com.derrick.cart.data.viewmodels
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.*
-import com.derrick.cart.repository.CartRepository
-import com.derrick.cart.models.Checklist
+import com.derrick.cart.data.repository.CartRepository
+import com.derrick.cart.data.local.entities.Checklist
 import com.derrick.cart.R
 import kotlinx.coroutines.*
 
@@ -15,7 +15,7 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
         cartRepository.insertChecklist(checklist)
     }
 
-    private fun getNewChecklistEntry(title: String, tags: String, itemsChecked: Long, size: Long) :Checklist{
+    private fun getNewChecklistEntry(title: String, tags: String, itemsChecked: Long, size: Long) : Checklist {
         return Checklist(title = title, tags = tags, itemsChecked = itemsChecked, size = size)
     }
 

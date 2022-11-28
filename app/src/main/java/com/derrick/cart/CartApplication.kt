@@ -1,8 +1,8 @@
 package com.derrick.cart
 
 import android.app.Application
-import com.derrick.cart.database.CartRoomDatabase
-import com.derrick.cart.repository.CartRepository
+import com.derrick.cart.data.local.database.CartRoomDatabase
+import com.derrick.cart.data.repository.CartRepository
 //import kotlinx.coroutines.CoroutineScope
 //import kotlinx.coroutines.SupervisorJob
 

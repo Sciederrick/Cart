@@ -1,11 +1,11 @@
-package com.derrick.cart.contracts
+package com.derrick.cart.ui.contracts
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
 import com.derrick.cart.CHECKLIST
-import com.derrick.cart.models.Checklist
+import com.derrick.cart.data.local.entities.Checklist
 import com.derrick.cart.ui.SubItemActivity
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.decodeFromString

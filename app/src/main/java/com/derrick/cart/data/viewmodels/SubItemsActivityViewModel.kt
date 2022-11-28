@@ -1,11 +1,11 @@
-package com.derrick.cart.viewmodels
+package com.derrick.cart.data.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.derrick.cart.models.ChecklistItem
-import com.derrick.cart.repository.CartRepository
+import com.derrick.cart.data.local.entities.ChecklistItem
+import com.derrick.cart.data.repository.CartRepository
 import kotlinx.coroutines.launch
 
 class SubItemsActivityViewModel(private val cartRepository: CartRepository): ViewModel() {

@@ -1,12 +1,10 @@
-package com.derrick.cart.viewmodels
+package com.derrick.cart.data.viewmodels
 
-import android.widget.TextView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.derrick.cart.models.Checklist
-import com.derrick.cart.models.ChecklistItem
-import com.derrick.cart.repository.CartRepository
+import com.derrick.cart.data.local.entities.ChecklistItem
+import com.derrick.cart.data.repository.CartRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 

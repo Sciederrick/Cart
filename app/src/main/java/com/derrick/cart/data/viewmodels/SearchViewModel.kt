@@ -1,10 +1,10 @@
-package com.derrick.cart.viewmodels
+package com.derrick.cart.data.viewmodels
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.*
-import com.derrick.cart.repository.CartRepository
-import com.derrick.cart.models.Checklist
+import com.derrick.cart.data.repository.CartRepository
+import com.derrick.cart.data.local.entities.Checklist
 import com.derrick.cart.R
 import kotlinx.coroutines.*
 

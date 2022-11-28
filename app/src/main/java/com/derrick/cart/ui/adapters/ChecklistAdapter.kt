@@ -1,8 +1,7 @@
-package com.derrick.cart.adapters
+package com.derrick.cart.ui.adapters
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CHECKLIST
-import com.derrick.cart.models.Checklist
+import com.derrick.cart.data.local.entities.Checklist
 import com.derrick.cart.R
 import com.derrick.cart.ui.SubItemsActivity
 import kotlinx.serialization.encodeToString

@@ -1,4 +1,4 @@
-package com.derrick.cart.models
+package com.derrick.cart.data.local.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

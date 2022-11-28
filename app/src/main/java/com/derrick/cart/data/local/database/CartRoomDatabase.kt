@@ -1,12 +1,13 @@
-package com.derrick.cart.database
+package com.derrick.cart.data.local.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.derrick.cart.R
-import com.derrick.cart.models.Checklist
-import com.derrick.cart.models.ChecklistItem
+import com.derrick.cart.data.local.daos.ChecklistDao
+import com.derrick.cart.data.local.daos.ChecklistItemDao
+import com.derrick.cart.data.local.entities.Checklist
+import com.derrick.cart.data.local.entities.ChecklistItem
 
 @Database(entities = [Checklist::class, ChecklistItem::class], exportSchema = false, version = 3)
 abstract class CartRoomDatabase : RoomDatabase() {
