@@ -9,9 +9,12 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CHECKLIST_ITEM
 import com.derrick.cart.R
+import com.derrick.cart.data.local.entities.Checklist
 import com.derrick.cart.data.local.entities.ChecklistItem
 import com.derrick.cart.data.local.entities.formattedPrice
 import com.derrick.cart.data.local.entities.formattedQuantity
@@ -20,9 +23,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ChecklistItemAdapter(private val context: Context) :
-    RecyclerView.Adapter<ChecklistItemAdapter.ViewHolder>() {
+    ListAdapter<ChecklistItem, ChecklistItemAdapter.ViewHolder>(CHECKLIST_ITEM_COMPARATOR) {
 
-    private var checklistItems: List<ChecklistItem>? = null
     private val layoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,15 +32,8 @@ class ChecklistItemAdapter(private val context: Context) :
         return ViewHolder(itemView)
     }
 
-    override fun getItemCount(): Int = checklistItems?.size ?: 0
-
-    fun setChecklistItems(checklistItems: List<ChecklistItem>) {
-        this.checklistItems = checklistItems
-        notifyDataSetChanged()
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val checklistItem = checklistItems?.get(position)
+        val checklistItem = getItem(position)
         holder.checklistItemTitle.text = checklistItem?.title
         holder.checklistItemDesc.text = checklistItem?.description
         holder.checklistItemQuantity.text = checklistItem?.formattedQuantity()
@@ -57,7 +52,7 @@ class ChecklistItemAdapter(private val context: Context) :
         init {
             itemView.setOnClickListener {
                 val intent = Intent(context, SubItemActivity::class.java)
-                intent.putExtra(CHECKLIST_ITEM, Json.encodeToString(checklistItems?.get(checklistItemPosition)))
+                intent.putExtra(CHECKLIST_ITEM, Json.encodeToString(getItem(checklistItemPosition)))
                 context.startActivity(intent)
             }
 
@@ -73,6 +68,20 @@ class ChecklistItemAdapter(private val context: Context) :
                 }
             }
 
+        }
+    }
+
+    companion object {
+        private val CHECKLIST_ITEM_COMPARATOR = object : DiffUtil.ItemCallback<ChecklistItem>() {
+            override fun areItemsTheSame(oldItem: ChecklistItem, newItem: ChecklistItem): Boolean {
+                return oldItem === newItem
+            }
+
+            override fun areContentsTheSame(oldItem: ChecklistItem, newItem: ChecklistItem): Boolean {
+                return oldItem.title == newItem.title &&
+                        oldItem.description == newItem.description &&
+                        oldItem.imageURI == newItem.imageURI
+            }
         }
     }
 }

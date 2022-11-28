@@ -105,7 +105,7 @@ class SubItemsActivity : AppCompatActivity() {
         checklist?.id?.let { it ->
             viewModel.getChecklistItemsByChecklistId(it).observe(this) { checklistItems ->
                 checklistItems?.let { it ->
-                    checklistItemAdapter?.setChecklistItems(it)
+                    checklistItemAdapter?.submitList(it)
                     _checklistItems = it
                 }
             }
