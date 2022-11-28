@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CHECKLIST
 import com.derrick.cart.data.local.entities.Checklist
@@ -17,9 +19,8 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ChecklistAdapter(private val context: Context)
-    : RecyclerView.Adapter<ChecklistAdapter.ViewHolder>() {
+    : ListAdapter<Checklist, ChecklistAdapter.ViewHolder>(CHECKLIST_COMPARATOR) {
 
-    private var checklists: List<Checklist>? = null
     private val layoutInflater = LayoutInflater.from(context)
     private var onListSelectedListener: OnListSelectedListener? = null
 
@@ -28,13 +29,10 @@ class ChecklistAdapter(private val context: Context)
         return ViewHolder(itemView)
     }
 
-    override fun getItemCount() = checklists?.size ?: 0
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val checklist = checklists?.get(position)
+        val checklist = getItem(position)
         val checklistProgress = (checklist?.itemsChecked?.toDouble()?.div(5) ?: 0) as Double
-        val checklistProgressPercentage = (checklistProgress * 100).toInt()
-
+        val checklistProgressPercentage:Int = (checklistProgress * 100).toInt()
         holder.textTitle.text = checklist?.title
         holder.itemsChecked.text = checklist?.itemsChecked.toString().plus("/${5}")
         holder.progressBar.progress = checklistProgressPercentage
@@ -45,10 +43,10 @@ class ChecklistAdapter(private val context: Context)
         onListSelectedListener = listener
     }
 
-    fun setChecklists(checklists: List<Checklist>) {
-        this.checklists = checklists
-        notifyDataSetChanged()
-    }
+//    fun setChecklists(checklists: List<Checklist>) {
+//        this.checklists = checklists
+//        notifyDataSetChanged()
+//    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textTitle: TextView = itemView.findViewById(R.id.listTitle)
@@ -60,16 +58,16 @@ class ChecklistAdapter(private val context: Context)
 
         init {
             itemView.setOnClickListener {
-                onListSelectedListener?.onListSelected(checklists!![checklistPosition])
+                onListSelectedListener?.onListSelected(getItem(checklistPosition))
 
                 val intent = Intent(context, SubItemsActivity::class.java)
-                val checklist = checklists?.get(checklistPosition)
+                val checklist = getItem(checklistPosition)
                 checklist?.let { it1 -> intent.putExtra(CHECKLIST, Json.encodeToString(it1)) }
                 context.startActivity(intent)
             }
 
             buttonListActions.setOnClickListener {
-                onListSelectedListener?.onOverflowOptionsSelected(checklists!![checklistPosition], checklistPosition)
+                onListSelectedListener?.onOverflowOptionsSelected(getItem(checklistPosition), checklistPosition)
             }
         }
     }
@@ -77,5 +75,19 @@ class ChecklistAdapter(private val context: Context)
     interface OnListSelectedListener {
         fun onListSelected(checklist: Checklist)
         fun onOverflowOptionsSelected(checklist: Checklist, checklistPosition: Int)
+    }
+
+    companion object {
+        private val CHECKLIST_COMPARATOR = object : DiffUtil.ItemCallback<Checklist>() {
+            override fun areItemsTheSame(oldItem: Checklist, newItem: Checklist): Boolean {
+                return oldItem === newItem
+            }
+
+            override fun areContentsTheSame(oldItem: Checklist, newItem: Checklist): Boolean {
+                return oldItem.title == newItem.title &&
+                        oldItem.tags == newItem.tags &&
+                        oldItem.itemsChecked == newItem.itemsChecked
+            }
+        }
     }
 }

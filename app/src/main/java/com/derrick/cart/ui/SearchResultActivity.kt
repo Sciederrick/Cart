@@ -99,7 +99,8 @@ class SearchResultActivity : AppCompatActivity(),
 
         viewModel.allChecklists.observe(this) { checklists ->
             checklists?.let {
-                checklistAdapter.setChecklists(it)
+//                checklistAdapter.setChecklists(it)
+                checklistAdapter.submitList(it)
             }
         }
 
@@ -128,7 +129,8 @@ class SearchResultActivity : AppCompatActivity(),
             searchQuery?.let {
                 viewModel.getChecklistsByTitleOrItemsCheckedOrTags(searchQuery).observe(this) {
                     it?.let {
-                        checklistAdapter.setChecklists(it)
+//                        checklistAdapter.setChecklists(it)
+                        checklistAdapter.submitList(it)
                     }
                 }
             }
