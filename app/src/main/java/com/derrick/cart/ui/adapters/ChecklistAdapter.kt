@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +21,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 class ChecklistAdapter(private val context: Context)
-    : ListAdapter<Checklist, ChecklistAdapter.ViewHolder>(CHECKLIST_COMPARATOR) {
+    : PagedListAdapter<Checklist, ChecklistAdapter.ViewHolder>(CHECKLIST_COMPARATOR) {
 
     private val layoutInflater = LayoutInflater.from(context)
     private var onListSelectedListener: OnListSelectedListener? = null
@@ -43,11 +45,6 @@ class ChecklistAdapter(private val context: Context)
         onListSelectedListener = listener
     }
 
-//    fun setChecklists(checklists: List<Checklist>) {
-//        this.checklists = checklists
-//        notifyDataSetChanged()
-//    }
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textTitle: TextView = itemView.findViewById(R.id.listTitle)
         val itemsChecked: TextView = itemView.findViewById(R.id.itemsChecked)
@@ -58,7 +55,7 @@ class ChecklistAdapter(private val context: Context)
 
         init {
             itemView.setOnClickListener {
-                onListSelectedListener?.onListSelected(getItem(checklistPosition))
+                getItem(checklistPosition)?.let { it1 -> onListSelectedListener?.onListSelected(it1) }
 
                 val intent = Intent(context, SubItemsActivity::class.java)
                 val checklist = getItem(checklistPosition)
@@ -67,7 +64,10 @@ class ChecklistAdapter(private val context: Context)
             }
 
             buttonListActions.setOnClickListener {
-                onListSelectedListener?.onOverflowOptionsSelected(getItem(checklistPosition), checklistPosition)
+                getItem(checklistPosition)?.let { it1 ->
+                    onListSelectedListener?.onOverflowOptionsSelected(
+                        it1, checklistPosition)
+                }
             }
         }
     }

@@ -1,10 +1,10 @@
 package com.derrick.cart.ui
 
-import android.app.SearchManager
-import android.content.ComponentName
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
@@ -14,34 +14,37 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CartApplication
 import com.derrick.cart.R
+import com.derrick.cart.data.local.daos.ChecklistDao
 import com.derrick.cart.ui.adapters.ChecklistAdapter
 import com.derrick.cart.databinding.ActivityItemsBinding
 import com.derrick.cart.data.local.entities.Checklist
+import com.derrick.cart.data.repository.CartRepository
 import com.derrick.cart.data.viewmodels.ItemsActivityViewModel
 import com.derrick.cart.data.viewmodels.ItemsActivityViewModelFactory
+import com.derrick.cart.databinding.ContentItemsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import kotlin.coroutines.CoroutineContext
 
 
 class ItemsActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
-    ChecklistAdapter.OnListSelectedListener, CoroutineScope {
-
-    private var _checklists: List<Checklist>? = null
-
-    private var job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.Main
+    ChecklistAdapter.OnListSelectedListener {
 
     /* bindings */
     private lateinit var binding: ActivityItemsBinding
@@ -49,6 +52,7 @@ class ItemsActivity : AppCompatActivity(),
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var navView: NavigationView
+    private lateinit var contentItems: ContentItemsBinding
     private lateinit var recyclerView: RecyclerView
     /* end of bindings */
 
@@ -80,7 +84,8 @@ class ItemsActivity : AppCompatActivity(),
         drawerLayout = binding.drawerLayout
         toolbar = binding.appBarItems.toolbar
         navView = binding.navView
-        recyclerView = binding.appBarItems.contentItems.checklists /*RecyclerView*/
+        contentItems = binding.appBarItems.contentItems
+        recyclerView = contentItems.checklists /*RecyclerView*/
 
         setContentView(binding.root)
 
@@ -102,11 +107,33 @@ class ItemsActivity : AppCompatActivity(),
 
         navView.setNavigationItemSelectedListener(this)
 
-        viewModel.allChecklists.observe(this) { checklists ->
-            checklists?.let {
-                checklistAdapter.submitList(it)
-                _checklists = it
-            }
+
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                checklistAdapter.loadStateFlow.collect {
+//                    contentItems.prependProgress.isVisible = it.source.prepend is LoadState.Loading
+//                    contentItems.appendProgress.isVisible = it.source.append is LoadState.Loading
+//                }
+//
+//            }
+//
+//        }
+
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                viewModel.checklists.collectLatest {
+//                    checklistAdapter.submitData(it)
+//                }
+//
+//            }
+//        }
+        lifecycleScope.launch {
+            prepopulate()
+        }
+
+        viewModel.checklists.observe(this) {
+            Log.d("ItemsActivity", "size: ${it.size}")
+            checklistAdapter.submitList(it)
         }
 
         recyclerView.layoutManager = checklistLayoutManager
@@ -134,9 +161,8 @@ class ItemsActivity : AppCompatActivity(),
             getString(R.string.preference_file_key), Context.MODE_PRIVATE
         ) ?: return
 
-        launch {
+        lifecycleScope.launch {
             viewModel.getChecklistHistory(this@ItemsActivity, sharedPref)
-
             updateChecklistHistory()
         }
 
@@ -144,7 +170,6 @@ class ItemsActivity : AppCompatActivity(),
     }
 
     override fun onPause() {
-        dialogManageList.dismiss()
         dialogManageList.dismiss()
 
         // save checklist view history
@@ -157,6 +182,7 @@ class ItemsActivity : AppCompatActivity(),
         super.onPause()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -168,16 +194,16 @@ class ItemsActivity : AppCompatActivity(),
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.appbar_actions, menu)
 
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView?
-
-        searchView?.isIconifiedByDefault = false
-
-        val componentName = ComponentName(this, SearchResultActivity::class.java)
-        val searchableInfo = searchManager.getSearchableInfo(componentName)
-
-        searchView?.setSearchableInfo(searchableInfo)
+//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+//        val searchItem = menu.findItem(R.id.action_search)
+//        val searchView = searchItem.actionView as SearchView?
+//
+//        searchView?.isIconifiedByDefault = false
+//
+//        val componentName = ComponentName(this, SearchResultActivity::class.java)
+//        val searchableInfo = searchManager.getSearchableInfo(componentName)
+//
+//        searchView?.setSearchableInfo(searchableInfo)
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -208,8 +234,8 @@ class ItemsActivity : AppCompatActivity(),
         target?.clear()
 
         for (listItem in viewModel.recentlyViewedChecklists) {
-            title = listItem.title!!
-            titleCondensed = if (listItem.title?.length!! > 20) listItem.title?.slice(0..20)
+            title = listItem.title
+            titleCondensed = if (title.length > 20) title.slice(0..20)
                 .plus("...") else title
             itemHistory = target!!.add(Menu.NONE, Menu.NONE, Menu.NONE, titleCondensed)
             itemHistory.icon = AppCompatResources.getDrawable(this, R.drawable.ic_history_24dp)
@@ -271,7 +297,7 @@ class ItemsActivity : AppCompatActivity(),
         val deleteBtn = view.findViewById<Button>(R.id.btnDeleteList)
         deleteBtn.setOnClickListener {
             dialogManageList.dismiss()
-            deleteConfirmationDialog(checklist)
+            deleteConfirmationDialog(checklist, checklistPosition)
         }
     }
 
@@ -290,7 +316,10 @@ class ItemsActivity : AppCompatActivity(),
         btnCreateNewList.setOnClickListener {
             val txtInput = view.findViewById<EditText>(R.id.renameList).text.toString()
             if (viewModel.isEntryValid(txtInput)) {
+//                val itemCount = checklistAdapter.itemCount
                 viewModel.addNewChecklist(title = txtInput)
+//                checklistAdapter.notifyItemInserted(itemCount)
+//                checklistAdapter.notifyItemRangeInserted(itemCount, 1)
             }
 
             dialogNewList.dismiss()
@@ -309,19 +338,33 @@ class ItemsActivity : AppCompatActivity(),
         }
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
-            val deletedChecklist = _checklists?.get(position)
-            deletedChecklist?.let { it -> deleteConfirmationDialog(it) }
+            val checklists = checklistAdapter.currentList?.toList()
+//            val checklists = checklistAdapter.snapshot().items
+            val deletedChecklist = checklists?.get(position)
+            if (deletedChecklist != null) {
+                deleteConfirmationDialog(deletedChecklist, position, true)
+            }
         }
     })
 
-    private fun deleteConfirmationDialog(checklist: Checklist) {
+    private fun deleteConfirmationDialog(checklist: Checklist, position: Int, swipeToDelete: Boolean = false) {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.delete_dialog_alert_title))
             .setMessage(getString(R.string.delete_question))
             .setCancelable(false)
-            .setNegativeButton(getString(R.string.no)) { _, _ -> checklistAdapter.notifyDataSetChanged()}
+            .setNegativeButton(getString(R.string.no)) { _, _ ->
+                checklistAdapter.notifyItemInserted(position)
+                checklistAdapter.notifyItemRangeInserted(position, 1)
+            }
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                Log.d("ItemsActivity", "d: $checklist, $position")
                 deleteChecklist(checklist)
+                if (!swipeToDelete) {
+                    Log.d("ItemsActivity", "here...")
+                    checklistAdapter.notifyItemRemoved(position)
+                    checklistAdapter.notifyItemRangeRemoved(position, 1)
+
+                }
             }
             .show()
     }
@@ -329,6 +372,12 @@ class ItemsActivity : AppCompatActivity(),
     private fun deleteChecklist(checklist: Checklist) {
         viewModel.deleteChecklist(checklist)
         Toast.makeText(this, getString(R.string.toast_delete_success, checklist.title), Toast.LENGTH_SHORT).show()
+    }
+
+    private suspend fun prepopulate() {
+        for (i in 0..200) {
+            viewModel.addNewChecklist(title = "title $i")
+        }
     }
 
 }

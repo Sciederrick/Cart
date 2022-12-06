@@ -32,19 +32,19 @@
         <activity
             android:name=".ui.SubItemActivity"
             android:label="@string/title_activity_sub_item" />
-        <activity
-            android:name=".ui.SearchResultActivity"
-            android:exported="false"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.AppBasic.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
+<!--        <activity-->
+<!--            android:name=".ui.SearchResultActivity"-->
+<!--            android:exported="false"-->
+<!--            android:launchMode="singleTop"-->
+<!--            android:theme="@style/Theme.AppBasic.NoActionBar">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.SEARCH" />-->
+<!--            </intent-filter>-->
 
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
+<!--            <meta-data-->
+<!--                android:name="android.app.searchable"-->
+<!--                android:resource="@xml/searchable" />-->
+<!--        </activity>-->
         <activity
             android:name=".ui.SettingsActivity"
             android:exported="false" />

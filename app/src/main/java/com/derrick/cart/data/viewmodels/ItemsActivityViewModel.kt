@@ -3,15 +3,35 @@ package com.derrick.cart.data.viewmodels
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.*
+import androidx.paging.*
 import com.derrick.cart.data.repository.CartRepository
 import com.derrick.cart.data.local.entities.Checklist
 import com.derrick.cart.R
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+
+private const val ITEMS_PER_PAGE = 50
 
 class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewModel() {
-    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
+//    var checklists: Flow<PagingData<Checklist>> = Pager(
+//        config = PagingConfig(pageSize = ITEMS_PER_PAGE, enablePlaceholders = false),
+//        pagingSourceFactory = { cartRepository.checklistPagingSource() }
+//    )
+//        .flow
+//        .cachedIn(viewModelScope)
 
-    fun insertChecklist(checklist: Checklist) = viewModelScope.launch {
+//    init {
+//        viewModelScope.launch {
+//
+//        }
+//    }
+val checklists: LiveData<PagedList<Checklist>> = cartRepository.getChecklists()
+
+
+//    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
+
+    private fun insertChecklist(checklist: Checklist) = viewModelScope.launch {
         cartRepository.insertChecklist(checklist)
     }
 
