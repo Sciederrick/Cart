@@ -18,7 +18,7 @@ interface ChecklistDao {
 //    val getAll: PagingSource<Int, Checklist>
 
     @get:Query("SELECT * FROM checklist")
-    val getAll: DataSource.Factory<Int, Checklist>
+    val getAll: PagingSource<Int, Checklist>
 
 
     @Query("SELECT * FROM checklist WHERE id IN (:ids)")
