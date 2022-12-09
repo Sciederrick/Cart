@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
@@ -15,11 +16,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.derrick.cart.CartApplication
 import com.derrick.cart.R
+import com.derrick.cart.data.local.daos.ChecklistDao
 import com.derrick.cart.ui.adapters.ChecklistAdapter
 import com.derrick.cart.databinding.ActivityItemsBinding
 import com.derrick.cart.data.local.entities.Checklist
@@ -30,6 +33,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import kotlin.coroutines.CoroutineContext
 
 
@@ -37,7 +41,7 @@ class ItemsActivity : AppCompatActivity(),
     NavigationView.OnNavigationItemSelectedListener,
     ChecklistAdapter.OnListSelectedListener, CoroutineScope {
 
-    private var _checklists: List<Checklist>? = null
+//    private var _checklists: List<Checklist>? = null
 
     private var job = Job()
     override val coroutineContext: CoroutineContext
@@ -58,7 +62,9 @@ class ItemsActivity : AppCompatActivity(),
 
     //ViewModels
     private val viewModel: ItemsActivityViewModel by viewModels {
-        ItemsActivityViewModelFactory((application as CartApplication).repository)
+        ItemsActivityViewModelFactory(
+            (application as CartApplication).database.checklistDao(),
+            (application as CartApplication).database.checklistItemDao())
     }
 
     //LayoutManagers
@@ -102,10 +108,10 @@ class ItemsActivity : AppCompatActivity(),
 
         navView.setNavigationItemSelectedListener(this)
 
-        viewModel.allChecklists.observe(this) { checklists ->
-            checklists?.let {
-                checklistAdapter.submitList(it)
-                _checklists = it
+        lifecycleScope.launch {
+
+            viewModel.pagedChecklists.collectLatest {
+                checklistAdapter.submitData(it)
             }
         }
 
@@ -168,16 +174,16 @@ class ItemsActivity : AppCompatActivity(),
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.appbar_actions, menu)
 
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchItem = menu.findItem(R.id.action_search)
-        val searchView = searchItem.actionView as SearchView?
-
-        searchView?.isIconifiedByDefault = false
-
-        val componentName = ComponentName(this, SearchResultActivity::class.java)
-        val searchableInfo = searchManager.getSearchableInfo(componentName)
-
-        searchView?.setSearchableInfo(searchableInfo)
+//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+//        val searchItem = menu.findItem(R.id.action_search)
+//        val searchView = searchItem.actionView as SearchView?
+//
+//        searchView?.isIconifiedByDefault = false
+//
+//        val componentName = ComponentName(this, SearchResultActivity::class.java)
+//        val searchableInfo = searchManager.getSearchableInfo(componentName)
+//
+//        searchView?.setSearchableInfo(searchableInfo)
 
         return super.onCreateOptionsMenu(menu)
     }
@@ -226,7 +232,7 @@ class ItemsActivity : AppCompatActivity(),
         updateChecklistHistory()
     }
 
-    override fun onOverflowOptionsSelected(checklist: Checklist, checklistPosition: Int) {
+    override fun onOverflowOptionsSelected(checklist: Checklist) {
         val view = layoutInflater.inflate(R.layout.bottom_sheet_manage_list, null)
 
         // Title
@@ -308,9 +314,12 @@ class ItemsActivity : AppCompatActivity(),
             return false
         }
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            val position = viewHolder.adapterPosition
-            val deletedChecklist = _checklists?.get(position)
-            deletedChecklist?.let { it -> deleteConfirmationDialog(it) }
+//            val position = viewHolder.adapterPosition
+//            val deletedChecklist = _checklists?.get(position)
+//            deletedChecklist?.let { it -> deleteConfirmationDialog(it) }
+            val checklistToDelete = (viewHolder as ChecklistAdapter.ChecklistViewHolder).checklist
+            Log.d("ItemsActivity", "checklistToDelete: $checklistToDelete")
+            checklistToDelete?.let { deleteConfirmationDialog(it) }
         }
     })
 
@@ -319,7 +328,7 @@ class ItemsActivity : AppCompatActivity(),
             .setTitle(getString(R.string.delete_dialog_alert_title))
             .setMessage(getString(R.string.delete_question))
             .setCancelable(false)
-            .setNegativeButton(getString(R.string.no)) { _, _ -> checklistAdapter.notifyDataSetChanged()}
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 deleteChecklist(checklist)
             }

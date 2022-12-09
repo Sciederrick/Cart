@@ -9,7 +9,7 @@ import com.derrick.cart.R
 import kotlinx.coroutines.*
 
 class SearchViewModel(private val cartRepository: CartRepository) : ViewModel() {
-    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
+//    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
 
     fun update(checklist: Checklist) = viewModelScope.launch {
         cartRepository.updateChecklist(checklist)

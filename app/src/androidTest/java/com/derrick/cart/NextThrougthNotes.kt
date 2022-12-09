@@ -23,7 +23,7 @@ class NextThroughNotes{
     @Test
     fun nextThroughNotes() {
         onView(withId(R.id.checklists)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<ChecklistAdapter.ViewHolder>(0, click())
+            RecyclerViewActions.actionOnItemAtPosition<ChecklistAdapter.ChecklistViewHolder>(0, click())
         )
 
         for(index in 0..DataManager.lists.lastIndex){

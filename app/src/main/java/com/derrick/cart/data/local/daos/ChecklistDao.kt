@@ -1,6 +1,7 @@
 package com.derrick.cart.data.local.daos
 
 import androidx.lifecycle.LiveData
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.derrick.cart.data.local.entities.Checklist
 
@@ -9,8 +10,12 @@ interface ChecklistDao {
     @Insert
     suspend fun insert(checklist: Checklist)
 
+//    @get:Query("SELECT * FROM checklist")
+//    val getAll: LiveData<List<Checklist>>
+//    @Query("SELECT * FROM checklist WHERE id > :id LIMIT :size")
+//    suspend fun getPagedChecklists(id: Int, size: Int): List<Checklist>
     @get:Query("SELECT * FROM checklist")
-    val getAll: LiveData<List<Checklist>>
+    val pagedChecklists: PagingSource<Int, Checklist>
 
     @Query("SELECT * FROM checklist WHERE id IN (:ids)")
     suspend fun getByIds(ids: List<Int>): List<Checklist>

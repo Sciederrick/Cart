@@ -3,16 +3,34 @@ package com.derrick.cart.data.viewmodels
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.lifecycle.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.derrick.cart.data.repository.CartRepository
 import com.derrick.cart.data.local.entities.Checklist
 import com.derrick.cart.R
+import com.derrick.cart.data.local.daos.ChecklistDao
+import com.derrick.cart.data.local.daos.ChecklistItemDao
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 
-class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewModel() {
-    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
+class ItemsActivityViewModel(private val checklistDao: ChecklistDao, checklistItemDao: ChecklistItemDao) : ViewModel() {
+//    val allChecklists: LiveData<List<Checklist>> = cartRepository.allChecklists
 
-    fun insertChecklist(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.insertChecklist(checklist)
+    val pagedChecklists: Flow<PagingData<Checklist>> = Pager(
+        config = PagingConfig(
+            pageSize = PAGE_SIZE,
+            enablePlaceholders = true,
+            maxSize = 200
+        )) {
+        checklistDao.pagedChecklists
+    }
+        .flow
+        .cachedIn(viewModelScope)
+
+    private fun insertChecklist(checklist: Checklist) = viewModelScope.launch {
+        checklistDao.insert(checklist)
     }
 
     private fun getNewChecklistEntry(title: String, tags: String, itemsChecked: Long, size: Long) : Checklist {
@@ -32,21 +50,21 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
     }
 
     fun updateChecklist(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.updateChecklist(checklist)
+        checklistDao.update(checklist)
     }
 
     fun deleteChecklist(checklist: Checklist) = viewModelScope.launch {
-        cartRepository.deleteChecklist(checklist)
+        checklistDao.delete(checklist)
     }
 
     private fun checklistsAsync(ids: List<Int>) = viewModelScope.async {
-        cartRepository.checklists(ids)
+        checklistDao.getByIds(ids)
     }
 
     fun getChecklistsByTitleOrItemsCheckedOrTags(
         searchQuery: String
     ) :LiveData<List<Checklist>> {
-        return cartRepository.filterChecklists("%$searchQuery%")
+        return checklistDao.getByTitleOrItemsCheckedOrTags("%$searchQuery%")
     }
 
     // list view history----------------------------------------------------------------------------
@@ -110,13 +128,16 @@ class ItemsActivityViewModel(private val cartRepository: CartRepository) : ViewM
 //        val noteList = notesIds?.let { DataManager.loadLists(*it) }
 //        if (noteList != null) recentlyViewedLists.addAll(noteList)
 //    }
+    companion object {
+        const val PAGE_SIZE = 50
+    }
 }
 
-class ItemsActivityViewModelFactory(private val cartRepository: CartRepository): ViewModelProvider.Factory {
+class ItemsActivityViewModelFactory(private val checklistDao: ChecklistDao, private val checklistItemDao: ChecklistItemDao): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ItemsActivityViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ItemsActivityViewModel(cartRepository) as T
+            return ItemsActivityViewModel(checklistDao, checklistItemDao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
